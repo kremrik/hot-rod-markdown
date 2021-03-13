@@ -8,7 +8,7 @@ GREEN := \e[32m
 #----------------------------------------------------------
 
 .PHONY: check
-check : unit-tests type-check black-format flake8-lint success
+check : unit-tests type-check black-format flake8-lint code-coverage success
 
 .PHONY: unit-tests
 unit-tests :
