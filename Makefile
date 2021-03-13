@@ -8,14 +8,14 @@ GREEN := \e[32m
 #----------------------------------------------------------
 
 .PHONY: check
-check : unit-tests doc-tests type-check black-format flake8-lint sphinx success
+check : unit-tests type-check black-format flake8-lint success
 
 .PHONY: unit-tests
 unit-tests :
 	@echo
 	@echo -e '$(BLUE)unit-tests'
 	@echo -e        '----------$(NO_COLOR)'
-	@python3 -m pytest ./*/test*.py
+	@python3 -m pytest
 	
 .PHONY: doc-tests
 doc-tests :
@@ -36,7 +36,7 @@ type-check :
 	@echo
 	@echo -e '$(BLUE)type-check'
 	@echo -e 		'----------$(NO_COLOR)'
-	@mypy ./*/*.py
+	@mypy $(MODULE)/*.py
 
 .PHONY: black-format
 black-format :
