@@ -9,7 +9,7 @@
 ## Example 2
 ```python example.py
 foo = 1
-print("replace me")
+print("change me")
 ```
 
 ### cool, right?

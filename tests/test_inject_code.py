@@ -78,17 +78,19 @@ class test_markdown_finder(unittest.TestCase):
     @patch("minject.inject_code._walk_dir")
     def test_null(self, m_walk_dir):
         m_walk_dir.return_value = []
+        directory = "./"
         gold = []
-        output = [m for m in markdown_finder()]
+        output = [m for m in markdown_finder(directory)]
         self.assertEqual(gold, output)
 
     @patch("minject.inject_code._walk_dir")
     def test_one_dir_with_md(self, m_walk_dir):
         m_walk_dir.return_value = mock_walk()
+        directory = "./"
         gold = [
             ("/path/subpath1", [], ["README.md"]),
         ]
-        output = [m for m in markdown_finder()]
+        output = [m for m in markdown_finder(directory)]
         self.assertEqual(gold, output)
 
 

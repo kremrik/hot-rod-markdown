@@ -2,17 +2,17 @@ from minject.io.fs import read_file, write_file
 
 from collections import namedtuple
 from typing import (
-    Any,
-    Callable,
     Generator,
     Iterable,
     List,
     Optional,
     Tuple,
 )
-from warnings import warn
 from os import chdir, walk
 from os.path import abspath, curdir
+
+
+__all__ = ["inject_code_into_md"]
 
 
 def inject_code_into_md(
@@ -36,11 +36,11 @@ def inject_code_into_md(
     thrown and the process will continue to any remaining
     directories/files.
     """
-    pass
+    if not directory:
+        directory = abspath(curdir)
 
-
-def is_md(filename: str) -> bool:
-    return filename.endswith(".md")
+    for loc in markdown_finder(directory):
+        inject(loc)
 
 
 # ---------------------------------------------------------
@@ -58,7 +58,7 @@ codeblock = namedtuple(
 
 # ---------------------------------------------------------
 def markdown_finder(
-    directory: Optional[str] = None,
+    directory: str,
     ignore: List[str] = None,
 ) -> Generator:
     for d in _walk_dir(directory=directory, ignore=ignore):
@@ -67,11 +67,8 @@ def markdown_finder(
 
 
 def _walk_dir(
-    directory: Optional[str], ignore: Optional[List[str]]
+    directory: str, ignore: Optional[List[str]]
 ) -> Generator[dirstruct, None, None]:
-    if not directory:
-        directory = abspath(curdir)
-
     if not ignore:
         ignore = []
 
@@ -221,3 +218,8 @@ def _resolve_refer(block: codeblock) -> str:
     code = read_file(path)
     str_code = "".join(code)
     return str_code
+
+
+# ---------------------------------------------------------
+def is_md(filename: str) -> bool:
+    return filename.endswith(".md")
