@@ -17,13 +17,6 @@ unit-tests :
 	@echo -e        '----------$(NO_COLOR)'
 	@python3 -m pytest tests/unit
 	
-.PHONY: doc-tests
-doc-tests :
-	@echo
-	@echo -e '$(BLUE)doc-tests'
-	@echo -e        '---------$(NO_COLOR)'
-	@python3 -m doctest $(MODULE)/*.py && echo 0
-	
 .PHONY: code-coverage
 code-coverage : cov
 	@echo
@@ -56,15 +49,6 @@ flake8-lint :
 		--count \
 		|| exit 1
 
-.PHONY: sphinx
-sphinx:
-	@echo
-	@echo -e '$(BLUE)sphinx-docs'
-	@echo -e 		'-----------$(NO_COLOR)'
-	@cd sphinx && make html
-	@touch docs/.nojekyll
-	@cp -a sphinx/build/html/* docs
-
 .PHONY: success
 success :
 	@echo
@@ -79,10 +63,6 @@ cov:
 .PHONY: coverage
 coverage: cov
 	@python3 -m http.server 8000 --directory htmlcov/
-
-.PHONY: docs
-docs:
-	@python3 -m http.server 8001 --directory docs/
 
 .PHONY: set-hooks
 set-hooks:
