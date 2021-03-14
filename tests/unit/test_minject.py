@@ -1,4 +1,4 @@
-from minject.inject_code import (
+from minject.minject import (
     markdown_finder,
     get_codeblocks,
     codeblock,
@@ -10,7 +10,7 @@ from unittest.mock import patch
 from textwrap import dedent
 
 
-@patch("minject.inject_code.read_file")
+@patch("minject.minject.read_file")
 class test_inject_codeblock(unittest.TestCase):
     def test(self, m_read_file):
         m_read_file.return_value = [
@@ -75,7 +75,7 @@ def mock_walk():
 
 
 class test_markdown_finder(unittest.TestCase):
-    @patch("minject.inject_code._walk_dir")
+    @patch("minject.minject._walk_dir")
     def test_null(self, m_walk_dir):
         m_walk_dir.return_value = []
         directory = "./"
@@ -83,7 +83,7 @@ class test_markdown_finder(unittest.TestCase):
         output = [m for m in markdown_finder(directory)]
         self.assertEqual(gold, output)
 
-    @patch("minject.inject_code._walk_dir")
+    @patch("minject.minject._walk_dir")
     def test_one_dir_with_md(self, m_walk_dir):
         m_walk_dir.return_value = mock_walk()
         directory = "./"

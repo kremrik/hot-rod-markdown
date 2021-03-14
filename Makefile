@@ -15,7 +15,7 @@ unit-tests :
 	@echo
 	@echo -e '$(BLUE)unit-tests'
 	@echo -e        '----------$(NO_COLOR)'
-	@python3 -m pytest
+	@python3 -m pytest tests/unit
 	
 .PHONY: doc-tests
 doc-tests :
