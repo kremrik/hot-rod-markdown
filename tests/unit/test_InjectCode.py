@@ -1,16 +1,10 @@
-from hrm.hrm import (
-    markdown_finder,
-    get_codeblocks,
-    codeblock,
-    dirstruct,
-    inject_codeblocks
-)
+from hrm.plugins.inject_code import InjectCode, codeblock
 import unittest
 from unittest.mock import patch
 from textwrap import dedent
 
 
-@patch("hrm.hrm.read_file")
+@patch("hrm.plugins.inject_code.read_file")
 class test_inject_codeblocks(unittest.TestCase):
     def test_one_refer_block_one_without(self, m_read_file):
         m_read_file.return_value = [
@@ -50,13 +44,13 @@ class test_inject_codeblocks(unittest.TestCase):
         ```
         """)
 
-        output = inject_codeblocks(
+        output = InjectCode.inject_codeblocks(
             blocks=blocks, markdown=markdown
         )
 
         self.assertEqual(gold, output)
 
-    @patch("hrm.hrm.exists", return_value=False)
+    @patch("hrm.plugins.inject_code.exists", return_value=False)
     def test_refer_block_has_wrong_path(self, m_read_file, m_exists):
         blocks = [
             codeblock(
@@ -90,44 +84,10 @@ class test_inject_codeblocks(unittest.TestCase):
         """)
 
         with self.assertWarns(UserWarning):
-            output = inject_codeblocks(
+            output = InjectCode.inject_codeblocks(
                 blocks=blocks, markdown=markdown
             )
 
-        self.assertEqual(gold, output)
-
-
-def mock_walk():
-    paths = [
-        dirstruct(
-            "/path",
-            ["subpath1", "subpath2"],
-            [".gitignore"],
-        ),
-        dirstruct("/path/subpath1", [], ["README.md"]),
-        dirstruct("/path/subpath2", [], ["test.py"]),
-    ]
-    for path in paths:
-        yield path
-
-
-class test_markdown_finder(unittest.TestCase):
-    @patch("hrm.hrm._walk_dir")
-    def test_null(self, m_walk_dir):
-        m_walk_dir.return_value = []
-        directory = "./"
-        gold = []
-        output = [m for m in markdown_finder(directory)]
-        self.assertEqual(gold, output)
-
-    @patch("hrm.hrm._walk_dir")
-    def test_one_dir_with_md(self, m_walk_dir):
-        m_walk_dir.return_value = mock_walk()
-        directory = "./"
-        gold = [
-            ("/path/subpath1", [], ["README.md"]),
-        ]
-        output = [m for m in markdown_finder(directory)]
         self.assertEqual(gold, output)
 
 
@@ -138,7 +98,7 @@ class test_get_codeblocks(unittest.TestCase):
             "##subheader"
         ]
         gold = []
-        output = list(get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock_no_language_no_refer(self):
@@ -150,7 +110,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = []
-        output = list(get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock_no_refer(self):
@@ -162,7 +122,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = []
-        output = list(get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock(self):
@@ -174,7 +134,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = [((2, 3), "python", "example.py")]
-        output = list(get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_mult_codeblock(self):
@@ -190,7 +150,7 @@ class test_get_codeblocks(unittest.TestCase):
         gold = [
             ((2, 3), "python", "example.py"),
         ]
-        output = list(get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
 
