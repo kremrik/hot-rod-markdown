@@ -11,8 +11,8 @@ from textwrap import dedent
 
 
 @patch("minject.minject.read_file")
-class test_inject_codeblock(unittest.TestCase):
-    def test_one_annotated_block(self, m_read_file):
+class test_inject_codeblocks(unittest.TestCase):
+    def test_one_refer_block_one_without(self, m_read_file):
         m_read_file.return_value = [
             "foo=1\n", 
             "print(foo)\n"
