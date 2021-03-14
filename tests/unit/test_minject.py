@@ -56,6 +56,47 @@ class test_inject_codeblocks(unittest.TestCase):
 
         self.assertEqual(gold, output)
 
+    def test_refer_block_has_wrong_path(self, m_read_file):
+        m_read_file.side_effect = FileNotFoundError
+
+        blocks = [
+            codeblock(
+                range=(2, 3),
+                language="python",
+                refers_to="example.py",
+            ),
+        ]
+
+        markdown = [
+            "# header\n",
+            "```python example.py\n",
+            "foo=1\n",
+            "```\n",
+            "## subheader\n",
+            "```json\n",
+            '{"foo": 1}\n',
+            "```\n",
+        ]
+
+        gold = dedent(
+        """\
+        # header
+        ```python example.py
+        foo=1
+        ```
+        ## subheader
+        ```json
+        {"foo": 1}
+        ```
+        """)
+
+        with self.assertWarns(UserWarning):
+            output = inject_codeblocks(
+                blocks=blocks, markdown=markdown
+            )
+
+        self.assertEqual(gold, output)
+
 
 def mock_walk():
     paths = [

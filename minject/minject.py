@@ -10,6 +10,7 @@ from typing import (
 )
 from os import chdir, walk
 from os.path import abspath, curdir
+from warnings import warn
 
 
 __all__ = ["inject_code_into_md"]
@@ -100,6 +101,10 @@ def inject(loc: dirstruct) -> None:
     for md_file in md_files:
         md = read_file(md_file)
         codeblocks = get_codeblocks(md)
+
+        if not codeblocks:
+            return
+
         new_md = inject_codeblocks(
             blocks=codeblocks, markdown=md
         )
@@ -174,6 +179,10 @@ def inject_codeblocks(
     )
 
     code = [_resolve_refer(c) for c in blocks]
+    code = [c for c in code if c]
+
+    if not code:
+        return "".join(markdown)
 
     md_output = _interlock(chunks, code)
 
@@ -216,9 +225,14 @@ def _resolve_refer(block: codeblock) -> str:
     if not path:
         return ""
 
-    code = read_file(path)
-    str_code = "".join(code)
-    return str_code
+    try:
+        code = read_file(path)
+        str_code = "".join(code)
+        return str_code
+    except FileNotFoundError:
+        msg = f"File '{path}' not found"
+        warn(msg)
+        return ""
 
 
 # ---------------------------------------------------------
