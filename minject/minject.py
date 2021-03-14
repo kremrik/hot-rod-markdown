@@ -9,7 +9,7 @@ from typing import (
     Tuple,
 )
 from os import chdir, walk
-from os.path import abspath, curdir
+from os.path import abspath, curdir, exists
 from warnings import warn
 
 
@@ -172,6 +172,7 @@ def inject_codeblocks(
     blocks: Iterable[codeblock], markdown: Iterable[str]
 ) -> str:
     markdown = list(markdown)
+    blocks = [b for b in blocks if _file_exists(b)]
     blocks = sorted(blocks, key=lambda x: x.range[0])
 
     chunks = _partition_md(
@@ -179,7 +180,6 @@ def inject_codeblocks(
     )
 
     code = [_resolve_refer(c) for c in blocks]
-    code = [c for c in code if c]
 
     if not code:
         return "".join(markdown)
@@ -220,19 +220,24 @@ def _interlock(l1: list, l2: list) -> list:
     return array
 
 
+def _file_exists(block: codeblock) -> bool:
+    path = block.refers_to
+    if exists(path):
+        return True
+    else:
+        msg = f"File '{path}' not found"
+        warn(msg)
+        return False
+
+
 def _resolve_refer(block: codeblock) -> str:
     path = block.refers_to
     if not path:
         return ""
 
-    try:
-        code = read_file(path)
-        str_code = "".join(code)
-        return str_code
-    except FileNotFoundError:
-        msg = f"File '{path}' not found"
-        warn(msg)
-        return ""
+    code = read_file(path)
+    str_code = "".join(code)
+    return str_code
 
 
 # ---------------------------------------------------------

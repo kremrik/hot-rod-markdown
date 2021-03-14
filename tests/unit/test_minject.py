@@ -56,9 +56,8 @@ class test_inject_codeblocks(unittest.TestCase):
 
         self.assertEqual(gold, output)
 
-    def test_refer_block_has_wrong_path(self, m_read_file):
-        m_read_file.side_effect = FileNotFoundError
-
+    @patch("minject.minject.exists", return_value=False)
+    def test_refer_block_has_wrong_path(self, m_read_file, m_exists):
         blocks = [
             codeblock(
                 range=(2, 3),
