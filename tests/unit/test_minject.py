@@ -12,7 +12,7 @@ from textwrap import dedent
 
 @patch("minject.minject.read_file")
 class test_inject_codeblock(unittest.TestCase):
-    def test(self, m_read_file):
+    def test_one_annotated_block(self, m_read_file):
         m_read_file.return_value = [
             "foo=1\n", 
             "print(foo)\n"
@@ -24,11 +24,6 @@ class test_inject_codeblock(unittest.TestCase):
                 language="python",
                 refers_to="example.py",
             ),
-            codeblock(
-                range=(6, 6),
-                language="json",
-                refers_to=None,
-            ),
         ]
 
         markdown = [
@@ -38,6 +33,7 @@ class test_inject_codeblock(unittest.TestCase):
             "```\n",
             "## subheader\n",
             "```json\n",
+            '{"foo": 1}\n',
             "```\n",
         ]
 
@@ -50,6 +46,7 @@ class test_inject_codeblock(unittest.TestCase):
         ```
         ## subheader
         ```json
+        {"foo": 1}
         ```
         """)
 
@@ -112,7 +109,7 @@ class test_get_codeblocks(unittest.TestCase):
             "```\n",
             "## subheader\n",
         ]
-        gold = [((2, 3), None, None)]
+        gold = []
         output = list(get_codeblocks(md))
         self.assertEqual(gold, output)
 
@@ -124,7 +121,7 @@ class test_get_codeblocks(unittest.TestCase):
             "```\n",
             "## subheader\n",
         ]
-        gold = [((2, 3), "python", None)]
+        gold = []
         output = list(get_codeblocks(md))
         self.assertEqual(gold, output)
 
@@ -152,7 +149,6 @@ class test_get_codeblocks(unittest.TestCase):
         ]
         gold = [
             ((2, 3), "python", "example.py"),
-            ((6, 6), "json", None),
         ]
         output = list(get_codeblocks(md))
         self.assertEqual(gold, output)

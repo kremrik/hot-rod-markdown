@@ -139,7 +139,8 @@ def get_codeblocks(
             language = None
             refers_to = None
 
-            yield block
+            if block.refers_to:
+                yield block
 
 
 def _describe_codeblock(
