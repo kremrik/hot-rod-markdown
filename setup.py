@@ -47,4 +47,5 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=("docs")),
     include_package_data=True,
+    scripts=["bin/minject"]
 )
