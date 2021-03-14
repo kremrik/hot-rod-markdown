@@ -1,23 +1,15 @@
-from hrm.plugins.inject_code import InjectCode, codeblock
+from hrm.plugins.inject_code import InjectCode
 import unittest
 from unittest.mock import patch
 from textwrap import dedent
 
 
 @patch("hrm.plugins.inject_code.read_file")
-class test_inject_codeblocks(unittest.TestCase):
+class test_transform(unittest.TestCase):
     def test_one_refer_block_one_without(self, m_read_file):
         m_read_file.return_value = [
             "foo=1\n", 
             "print(foo)\n"
-        ]
-
-        blocks = [
-            codeblock(
-                range=(2, 3),
-                language="python",
-                refers_to="example.py",
-            ),
         ]
 
         markdown = [
@@ -44,22 +36,12 @@ class test_inject_codeblocks(unittest.TestCase):
         ```
         """)
 
-        output = InjectCode.inject_codeblocks(
-            blocks=blocks, markdown=markdown
-        )
-
+        ic = InjectCode(".")
+        output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
     @patch("hrm.plugins.inject_code.exists", return_value=False)
     def test_refer_block_has_wrong_path(self, m_read_file, m_exists):
-        blocks = [
-            codeblock(
-                range=(2, 3),
-                language="python",
-                refers_to="example.py",
-            ),
-        ]
-
         markdown = [
             "# header\n",
             "```python example.py\n",
@@ -83,14 +65,16 @@ class test_inject_codeblocks(unittest.TestCase):
         ```
         """)
 
+        ic = InjectCode(".")
         with self.assertWarns(UserWarning):
-            output = InjectCode.inject_codeblocks(
-                blocks=blocks, markdown=markdown
-            )
+            output = ic.transform(markdown)
+            self.assertEqual(gold, output)
 
         self.assertEqual(gold, output)
 
 
+# testing "APIs" for main implementation abstractions
+# ---------------------------------------------------------
 class test_get_codeblocks(unittest.TestCase):
     def test_no_codeblocks(self):
         md = [
