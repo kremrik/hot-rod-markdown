@@ -1,4 +1,4 @@
-from minject import inject_code_into_md
+from hrm import inject_code_into_md
 from cli.parser import cli
 
 from sys import argv

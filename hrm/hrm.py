@@ -1,4 +1,4 @@
-from minject.io.fs import read_file, write_file
+from hrm.io.fs import read_file, write_file
 
 from collections import namedtuple
 from typing import (
@@ -94,7 +94,6 @@ def _is_md_dir(loc: dirstruct) -> bool:
 
 # ---------------------------------------------------------
 def inject(loc: dirstruct) -> None:
-    # TODO: break out into fnc
     chdir(loc.root)
 
     md_files = _get_md_files(loc.files)

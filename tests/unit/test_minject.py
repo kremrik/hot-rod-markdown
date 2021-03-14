@@ -1,4 +1,4 @@
-from minject.minject import (
+from hrm.hrm import (
     markdown_finder,
     get_codeblocks,
     codeblock,
@@ -10,7 +10,7 @@ from unittest.mock import patch
 from textwrap import dedent
 
 
-@patch("minject.minject.read_file")
+@patch("hrm.hrm.read_file")
 class test_inject_codeblocks(unittest.TestCase):
     def test_one_refer_block_one_without(self, m_read_file):
         m_read_file.return_value = [
@@ -56,7 +56,7 @@ class test_inject_codeblocks(unittest.TestCase):
 
         self.assertEqual(gold, output)
 
-    @patch("minject.minject.exists", return_value=False)
+    @patch("hrm.hrm.exists", return_value=False)
     def test_refer_block_has_wrong_path(self, m_read_file, m_exists):
         blocks = [
             codeblock(
@@ -112,7 +112,7 @@ def mock_walk():
 
 
 class test_markdown_finder(unittest.TestCase):
-    @patch("minject.minject._walk_dir")
+    @patch("hrm.hrm._walk_dir")
     def test_null(self, m_walk_dir):
         m_walk_dir.return_value = []
         directory = "./"
@@ -120,7 +120,7 @@ class test_markdown_finder(unittest.TestCase):
         output = [m for m in markdown_finder(directory)]
         self.assertEqual(gold, output)
 
-    @patch("minject.minject._walk_dir")
+    @patch("hrm.hrm._walk_dir")
     def test_one_dir_with_md(self, m_walk_dir):
         m_walk_dir.return_value = mock_walk()
         directory = "./"
