@@ -58,7 +58,7 @@ success :
 
 .PHONY: cov
 cov:
-	@python -m pytest --cov=$(MODULE) --cov-config=.coveragerc --cov-report html
+	@python -m pytest --cov=. --cov-config=.coveragerc --cov-report html
 
 .PHONY: coverage
 coverage: cov
