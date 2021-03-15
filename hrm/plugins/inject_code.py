@@ -1,5 +1,5 @@
 from hrm.io.fs import read_file
-from hrm.plugins.base import HotRodMarkdown
+from hrm.plugins._base import HotRodMarkdown
 
 from collections import namedtuple
 from typing import (
@@ -13,20 +13,19 @@ from warnings import warn
 from os.path import exists
 
 
+__all__ = ["Command"]
+
+
 codeblock = namedtuple(
     "codeblock",
     ["range", "language", "refers_to"],
 )
 
 
-class InjectCode(HotRodMarkdown):
-
+class Command(HotRodMarkdown):
     __help__ = (
         "Injects code from files into annotated codeblocks"
     )
-
-    def __init__(self, path: str) -> None:
-        super().__init__(path)
 
     def transform(
         self, md_contents: Iterable[str]
@@ -55,7 +54,7 @@ class InjectCode(HotRodMarkdown):
                 (
                     language,
                     refers_to,
-                ) = InjectCode._describe_codeblock(line)
+                ) = Command._describe_codeblock(line)
 
             else:
                 range_end = pos
@@ -100,23 +99,21 @@ class InjectCode(HotRodMarkdown):
     ) -> str:
         markdown = list(markdown)
         blocks = [
-            b for b in blocks if InjectCode._file_exists(b)
+            b for b in blocks if Command._file_exists(b)
         ]
         blocks = sorted(blocks, key=lambda x: x.range[0])
 
-        chunks = InjectCode._partition_md(
+        chunks = Command._partition_md(
             blocks=blocks, markdown=markdown
         )
 
-        code = [
-            InjectCode._resolve_refer(c) for c in blocks
-        ]
+        code = [Command._resolve_refer(c) for c in blocks]
 
         # TODO: this should just return "" to avoid writing
         if not code:
             return "".join(markdown)
 
-        md_output = InjectCode._interlock(chunks, code)
+        md_output = Command._interlock(chunks, code)
 
         return "".join(md_output)
 

@@ -1,4 +1,4 @@
-from hrm.plugins.inject_code import InjectCode
+from hrm.plugins.inject_code import Command
 import unittest
 from unittest.mock import patch
 from textwrap import dedent
@@ -36,7 +36,7 @@ class test_transform(unittest.TestCase):
         ```
         """)
 
-        ic = InjectCode(".")
+        ic = Command(".")
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
@@ -65,7 +65,7 @@ class test_transform(unittest.TestCase):
         ```
         """)
 
-        ic = InjectCode(".")
+        ic = Command(".")
         with self.assertWarns(UserWarning):
             output = ic.transform(markdown)
             self.assertEqual(gold, output)
@@ -82,7 +82,7 @@ class test_get_codeblocks(unittest.TestCase):
             "##subheader"
         ]
         gold = []
-        output = list(InjectCode.get_codeblocks(md))
+        output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock_no_language_no_refer(self):
@@ -94,7 +94,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = []
-        output = list(InjectCode.get_codeblocks(md))
+        output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock_no_refer(self):
@@ -106,7 +106,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = []
-        output = list(InjectCode.get_codeblocks(md))
+        output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock(self):
@@ -118,7 +118,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = [((2, 3), "python", "example.py")]
-        output = list(InjectCode.get_codeblocks(md))
+        output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_mult_codeblock(self):
@@ -134,7 +134,7 @@ class test_get_codeblocks(unittest.TestCase):
         gold = [
             ((2, 3), "python", "example.py"),
         ]
-        output = list(InjectCode.get_codeblocks(md))
+        output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_codeblock_w_only_refer(self):
@@ -150,7 +150,7 @@ class test_get_codeblocks(unittest.TestCase):
         gold = [
             ((2, 3), None, "example.py"),
         ]
-        output = list(InjectCode.get_codeblocks(md))
+        output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
 
 
