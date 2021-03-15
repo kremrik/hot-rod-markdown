@@ -9,8 +9,9 @@ from typing import Iterable, Optional
 class HotRodMarkdown(ABC):
     __help__: str
 
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, verbose: bool) -> None:
         self.path = path
+        self.verbose = verbose
         self._directory = ""
 
     @property
@@ -35,6 +36,9 @@ class HotRodMarkdown(ABC):
             return
 
         self._write(xform_results)
+
+        if self.verbose:
+            print(f"Changed: {self.path}")
 
     def _chdir(self) -> None:
         chdir(self.directory)

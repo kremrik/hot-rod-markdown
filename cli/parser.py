@@ -39,6 +39,13 @@ def add_plugin_parsers(parser: ArgumentParser) -> None:
             help="Path to directory at which to begin"
         )
 
+        sp.add_argument(
+            "-v",
+            "--verbose", 
+            action="store_true",
+            default=False,
+        )
+
         for arg, typ in args.items():
             a_name = _arg_name(arg)
             a_type = _arg_type(typ)

@@ -36,7 +36,7 @@ class test_transform(unittest.TestCase):
         ```
         """)
 
-        ic = Command(".")
+        ic = Command(path=".", verbose=False)
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
@@ -65,7 +65,7 @@ class test_transform(unittest.TestCase):
         ```
         """)
 
-        ic = Command(".")
+        ic = Command(path=".", verbose=False)
         with self.assertWarns(UserWarning):
             output = ic.transform(markdown)
             self.assertEqual(gold, output)
