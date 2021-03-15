@@ -12,11 +12,6 @@ def cli(arguments: List[str]) -> Namespace:
     return parser.parse_args(arguments)
 
 
-def route(cmd, args: Namespace) -> None:
-    args = dict(args)
-    return main(cmd, **args)
-
-
 def get_plugin_locs() -> List[str]:
     return [
         p 

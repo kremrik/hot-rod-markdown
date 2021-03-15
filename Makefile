@@ -30,6 +30,7 @@ type-check :
 	@echo -e '$(BLUE)type-check'
 	@echo -e 		'----------$(NO_COLOR)'
 	@mypy $(MODULE)/*.py
+	@mypy cli/*.py
 
 .PHONY: black-format
 black-format :
