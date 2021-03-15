@@ -21,5 +21,5 @@ foo=1
 ```
 
 ```python example.py
-foo=1
+foo = 1
 ```

@@ -1,29 +1,35 @@
-from collections import namedtuple
-from os import walk
+from os import getcwd, walk
+from os.path import join
 from typing import Generator, List, Optional
 
 
-dirstruct = namedtuple(
-    "dirstruct",
-    ["root", "dirs", "files"],
-)
+__all__ = ["main"]
 
 
+def main(cmd, directory: Optional[str] = None) -> None:
+    if not directory:
+        directory = getcwd()
+
+    for md_file in markdown_finder(directory):
+        job = cmd(md_file)
+        job.run()
+
+
+# ---------------------------------------------------------
 def markdown_finder(
     directory: str,
-    ignore: List[str] = None,
+    ignore: Optional[List[str]] = None,
 ) -> Generator:
-    for d in _walk_dir(directory=directory, ignore=ignore):
-        if _is_md_dir(d):
-            yield d
-
-
-def _walk_dir(
-    directory: str, ignore: Optional[List[str]]
-) -> Generator[dirstruct, None, None]:
     if not ignore:
         ignore = []
 
+    for d in _walk_dir(directory=directory, ignore=ignore):
+        yield d
+
+
+def _walk_dir(
+    directory: str, ignore: list
+) -> Generator[str, None, None]:
     for root, dirs, files in walk(directory, topdown=True):
         for ign in ignore:
             if ign in dirs:
@@ -33,14 +39,9 @@ def _walk_dir(
             if dir.startswith("."):
                 dirs.remove(dir)
 
-        yield dirstruct(root, dirs, files)
-
-
-def _is_md_dir(loc: dirstruct) -> bool:
-    for file in loc.files:
-        if is_md(file):
-            return True
-    return False
+        for file in files:
+            if is_md(file):
+                yield join(root, file)
 
 
 def is_md(filename: str) -> bool:

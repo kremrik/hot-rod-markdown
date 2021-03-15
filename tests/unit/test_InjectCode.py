@@ -137,6 +137,22 @@ class test_get_codeblocks(unittest.TestCase):
         output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
+    def test_codeblock_w_only_refer(self):
+        md = [
+            "# header\n",
+            "```example.py\n",
+            "foo=1\n",
+            "```\n",
+            "## subheader\n",
+            "```json\n",
+            "```"
+        ]
+        gold = [
+            ((2, 3), None, "example.py"),
+        ]
+        output = list(InjectCode.get_codeblocks(md))
+        self.assertEqual(gold, output)
+
 
 if __name__ == "__main__":
     unittest.main()
