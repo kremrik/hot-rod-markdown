@@ -1,21 +1,20 @@
 from hrm import plugins
+from hrm.engine import main
 
 from argparse import ArgumentParser, Namespace
+from os import getcwd
 from typing import List
 
 
-def cli(arguments: List[str]) ->Namespace:
-    parser = ArgumentParser()
-
-    parser.add_argument(
-        "--directory",
-        "-d",
-        type=str,
-        required=False,
-        help="Path to directory to begin traversal",
-    )
-
+def cli(arguments: List[str]) -> Namespace:
+    parser = ArgumentParser(prog='PROG')
+    add_subparsers(parser)
     return parser.parse_args(arguments)
+
+
+def route(cmd, args: Namespace) -> None:
+    args = dict(args)
+    return main(cmd, **args)
 
 
 def get_plugin_locs() -> List[str]:
@@ -33,16 +32,19 @@ def add_subparsers(parser: ArgumentParser) -> None:
     )
 
     for plugin_name in plugin_names:
+        cli_name = plugin_name.replace("_", "-")
         cmd = getattr(plugins, plugin_name).Command
         attrs = dict(cmd.__dict__)
         args = attrs.get("__annotations__", {})
         help = attrs.get("__help__")
         
-        sp = subparsers.add_parser(plugin_name, help=help)
+        sp = subparsers.add_parser(cli_name, help=help)
+        sp.set_defaults(callback=cmd)
 
         sp.add_argument(
             "path", 
             nargs="?", 
+            default=getcwd(),
             help="Path to directory at which to begin"
         )  # default arg all commands take
 
@@ -74,15 +76,6 @@ def arg_required(arg_type) -> bool:
 
 if __name__ == "__main__":
     parser = ArgumentParser(prog='PROG')
-    # subparsers = parser.add_subparsers(help="help")
-    # sp = subparsers.add_parser("inject_code")
-    # sp.add_argument("--foo", type=str)
-    # sp.add_argument(
-    #     "path",
-    #     nargs="?",
-    #     help="Path to directory to begin traversal",
-    # )
-    # print(parser.parse_args(["inject_code", "--foo", "1"]))
     add_subparsers(parser)
     # print(parser.parse_args(["-h"]))
-    print(parser.parse_args(["inject_code", "/path"]))
+    print(parser.parse_args(["inject-code"]))

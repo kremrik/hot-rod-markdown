@@ -6,13 +6,8 @@ from typing import Generator, List, Optional
 __all__ = ["main"]
 
 
-def main(
-    cmd, directory: Optional[str] = None, **kwargs
-) -> None:
-    if not directory:
-        directory = getcwd()
-
-    for md_file in markdown_finder(directory):
+def main(cmd, path: str, **kwargs) -> None:
+    for md_file in markdown_finder(path):
         job = cmd(md_file, **kwargs)
         job.run()
 
