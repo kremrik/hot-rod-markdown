@@ -120,6 +120,9 @@ class Command(HotRodMarkdown):
             blocks=blocks, markdown=markdown
         )
 
+        print(
+            "$$$$$$$$$$$$$$", Command._resolve_refer("hi")
+        )
         code = [Command._resolve_refer(c) for c in blocks]
 
         # TODO: this should just return "" to avoid writing

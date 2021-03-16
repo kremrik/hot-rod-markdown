@@ -4,13 +4,12 @@ from unittest.mock import patch
 from textwrap import dedent
 
 
-@patch("hrm.plugins.inject_code.read_file")
+@patch("hrm.plugins.inject_code.Command._resolve_refer")
 class test_transform(unittest.TestCase):
-    def test_one_refer_block_one_without(self, m_read_file):
-        m_read_file.return_value = [
-            "foo=1\n", 
-            "print(foo)\n"
-        ]
+
+    @patch("hrm.plugins.inject_code.exists", return_value=True)
+    def test_one_refer_block_one_without(self, m_exists, m_read_file):
+        m_read_file.return_value = "foo=1\nprint(foo)\n"
 
         markdown = [
             "# header\n",
@@ -41,7 +40,7 @@ class test_transform(unittest.TestCase):
         self.assertEqual(gold, output)
 
     @patch("hrm.plugins.inject_code.exists", return_value=False)
-    def test_refer_block_has_wrong_path(self, m_read_file, m_exists):
+    def test_refer_block_has_wrong_path(self, m_exists, m_read_file):
         markdown = [
             "# header\n",
             "```python example.py\n",

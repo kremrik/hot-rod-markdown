@@ -1,4 +1,8 @@
-from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
+from argparse import (
+    ArgumentParser,
+    Namespace,
+    RawDescriptionHelpFormatter,
+)
 from textwrap import dedent
 from typing import List
 from os import getcwd, listdir
@@ -10,7 +14,7 @@ __all__ = ["cli"]
 
 
 def cli(arguments: List[str]) -> Namespace:
-    parser = ArgumentParser(prog='PROG')
+    parser = ArgumentParser(prog="hrm")
     add_plugin_parsers(parser)
     return parser.parse_args(arguments)
 
@@ -24,31 +28,34 @@ def add_plugin_parsers(parser: ArgumentParser) -> None:
     for plugin_path in plugin_locs:
         plugin_name = _mod_name_from_path(plugin_path)
         cli_name = _friendly_plugin_name(plugin_name)
-        cmd = _load_module(plugin_name, plugin_path).Command
+        cmd = _load_module(
+            plugin_name, plugin_path
+        ).Command
 
         args = _plugin_args(cmd)
         help = _plugin_help(cmd)
         docs = _plugin_desc(cmd)
-        
+
         sp = subparsers.add_parser(
-            cli_name, 
+            cli_name,
             help=help,
             formatter_class=RawDescriptionHelpFormatter,
-            description=docs
+            description=docs,
         )
+
         sp.set_defaults(callback=cmd)
 
         # default arg all _base commands take
         sp.add_argument(
-            "path", 
-            nargs="?", 
+            "path",
+            nargs="?",
             default=getcwd(),
-            help="Path to directory at which to begin"
+            help="Path to directory at which to begin",
         )
 
         sp.add_argument(
             "-v",
-            "--verbose", 
+            "--verbose",
             action="store_true",
             default=False,
         )
@@ -57,11 +64,15 @@ def add_plugin_parsers(parser: ArgumentParser) -> None:
             a_name = _arg_name(arg)
             a_type = _arg_type(typ)
             req = _arg_required(typ)
-            sp.add_argument(a_name, type=a_type, required=req)
+            sp.add_argument(
+                a_name, type=a_type, required=req
+            )
 
 
 def _plugin_locs() -> List[str]:
-    plugins_dir = join(dirname(dirname(__file__)), "hrm/plugins")
+    plugins_dir = join(
+        dirname(dirname(__file__)), "hrm/plugins"
+    )
     plugins = [
         join(plugins_dir, p)
         for p in listdir(plugins_dir)
@@ -100,7 +111,7 @@ def _plugin_help(obj) -> str:
 def _plugin_desc(obj) -> str:
     attrs = dict(obj.__dict__)
     docs = attrs.get("__doc__", "")
-    
+
     if docs:
         return dedent(docs)
     else:
@@ -114,7 +125,7 @@ def _arg_name(arg: str) -> str:
 def _arg_type(arg_type) -> type:
     if isinstance(arg_type, type):
         return arg_type
-    
+
     arg = arg_type.__dict__.get("__args__")
     return arg[0]
 
@@ -122,9 +133,9 @@ def _arg_type(arg_type) -> type:
 def _arg_required(arg_type) -> bool:
     if isinstance(arg_type, type):
         return True
-    
+
     arg = arg_type.__dict__.get("__args__")
     if type(None) in arg:
         return False
-    
+
     return True
