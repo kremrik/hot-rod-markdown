@@ -5,10 +5,10 @@ from textwrap import dedent
 
 
 @patch("hrm.plugins.inject_code.Command._resolve_refer")
+@patch("hrm.plugins.inject_code.exists")
 class test_transform(unittest.TestCase):
-
-    @patch("hrm.plugins.inject_code.exists", return_value=True)
     def test_one_refer_block_one_without(self, m_exists, m_read_file):
+        m_exists.return_value = True
         m_read_file.return_value = "foo=1\nprint(foo)\n"
 
         markdown = [
@@ -39,8 +39,9 @@ class test_transform(unittest.TestCase):
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
-    @patch("hrm.plugins.inject_code.exists", return_value=False)
     def test_refer_block_has_wrong_path(self, m_exists, m_read_file):
+        m_exists.return_value = False
+
         markdown = [
             "# header\n",
             "```python example.py\n",
