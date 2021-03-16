@@ -21,6 +21,7 @@ class test_transform(unittest.TestCase):
             '{"foo": 1}\n',
             "```\n",
         ]
+        markdown = (line for line in markdown)
 
         gold = dedent(
         """\
@@ -53,17 +54,7 @@ class test_transform(unittest.TestCase):
             "```\n",
         ]
 
-        gold = dedent(
-        """\
-        # header
-        ```python example.py
-        foo=1
-        ```
-        ## subheader
-        ```json
-        {"foo": 1}
-        ```
-        """)
+        gold = ""
 
         ic = Command(path=".", verbose=False)
         with self.assertWarns(UserWarning):

@@ -3,7 +3,7 @@ from hrm.io import fs
 from abc import ABC, abstractmethod
 from os import chdir
 from os.path import dirname
-from typing import Iterable, Optional
+from typing import Generator, Optional, Union
 
 
 class HotRodMarkdown(ABC):
@@ -23,8 +23,8 @@ class HotRodMarkdown(ABC):
 
     @abstractmethod
     def transform(
-        self, md_contents: Iterable[str]
-    ) -> Optional[str]:
+        self, md_contents: Generator[str, None, None]
+    ) -> Optional[Union[str, Generator[str, None, None]]]:
         pass
 
     def run(self) -> None:
@@ -44,8 +44,10 @@ class HotRodMarkdown(ABC):
     def _chdir(self) -> None:
         chdir(self.directory)
 
-    def _read(self) -> Iterable[str]:
+    def _read(self) -> Generator[str, None, None]:
         return fs.read_file(self.path)
 
-    def _write(self, data: str) -> None:
+    def _write(
+        self, data: Union[Generator[str, None, None], str]
+    ) -> None:
         fs.write_file(path=self.path, data=data)

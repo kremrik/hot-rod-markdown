@@ -1,14 +1,21 @@
-from typing import Iterable
+from typing import Generator, Union
 
 
 __all__ = ["read_file", "write_file"]
 
 
-def read_file(path: str) -> Iterable[str]:
+def read_file(path: str) -> Generator[str, None, None]:
     with open(path, "r") as f:
-        return f.readlines()
+        for line in f:
+            yield line
 
 
-def write_file(path, data: str) -> None:
+def write_file(
+    path, data: Union[str, Generator[str, None, None]]
+) -> None:
     with open(path, "w") as f:
-        f.write(data)
+        if isinstance(data, str):
+            f.write(data)
+        else:
+            for line in data:
+                f.write(line)

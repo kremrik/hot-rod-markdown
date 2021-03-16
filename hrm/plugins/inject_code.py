@@ -4,7 +4,6 @@ from hrm.plugins._base import HotRodMarkdown
 from collections import namedtuple
 from typing import (
     Generator,
-    Iterable,
     List,
     Optional,
     Tuple,
@@ -41,17 +40,18 @@ class Command(HotRodMarkdown):
     )
 
     def transform(
-        self, md_contents: Iterable[str]
+        self, md_contents: Generator[str, None, None]
     ) -> Optional[str]:
-        codeblocks = self.get_codeblocks(md_contents)
+        md = list(md_contents)
+        codeblocks = self.get_codeblocks(md)
         output = self.inject_codeblocks(
-            blocks=codeblocks, markdown=md_contents
+            blocks=codeblocks, markdown=md
         )
         return output
 
     @staticmethod
     def get_codeblocks(
-        markdown_text: Iterable[str],
+        markdown_text: List[str],
     ) -> Generator[codeblock, None, None]:
         range_start = None
         range_end = None
@@ -107,27 +107,27 @@ class Command(HotRodMarkdown):
 
     @staticmethod
     def inject_codeblocks(
-        blocks: Iterable[codeblock],
-        markdown: Iterable[str],
+        blocks: Generator[codeblock, None, None],
+        markdown: List[str],
     ) -> str:
-        markdown = list(markdown)
-        blocks = [
+        existing_blocks = [
             b for b in blocks if Command._file_exists(b)
         ]
-        blocks = sorted(blocks, key=lambda x: x.range[0])
+        sorted_blocks = sorted(
+            existing_blocks, key=lambda x: x.range[0]
+        )
 
         chunks = Command._partition_md(
-            blocks=blocks, markdown=markdown
+            blocks=sorted_blocks, markdown=markdown
         )
 
-        print(
-            "$$$$$$$$$$$$$$", Command._resolve_refer("hi")
-        )
-        code = [Command._resolve_refer(c) for c in blocks]
+        code = [
+            Command._resolve_refer(c)
+            for c in sorted_blocks
+        ]
 
-        # TODO: this should just return "" to avoid writing
         if not code:
-            return "".join(markdown)
+            return ""
 
         md_output = Command._interlock(chunks, code)
 
@@ -135,10 +135,9 @@ class Command(HotRodMarkdown):
 
     @staticmethod
     def _partition_md(
-        blocks: Iterable[codeblock],
-        markdown: Iterable[str],
+        blocks: List[codeblock],
+        markdown: List[str],
     ) -> List[str]:
-        markdown = list(markdown)
         sorted(blocks, key=lambda x: x.range[0])
 
         chunks = []
