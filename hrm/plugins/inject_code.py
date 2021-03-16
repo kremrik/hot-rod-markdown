@@ -23,6 +23,19 @@ codeblock = namedtuple(
 
 
 class Command(HotRodMarkdown):
+    """
+    Code from files can be inserted into md codeblocks by
+    annotating them like the below example:
+
+    ```python file.py
+    ```       ^^^^^^^
+
+    The underlined portion reflects a relative reference to
+    the file whose contents you wish to inject, which will
+    then appear between the backticks. The language is not
+    required to be specified.
+    """
+
     __help__ = (
         "Injects code from files into annotated codeblocks"
     )

@@ -14,12 +14,11 @@
 |_||_|\___/  |_| |_|_\ \___/|___/  |_|  |_/_/ \_\|_|_\ _|\_\ |___/ \___/ \_/\_/ |_|\_| 
 ```
 
-Do more with Markdown!
+Soup-up your Markdown!
 
-```python exadmple.py
-foo=1
-```
-
-```python example.py
-foo = 1
-```
+### Motivation
+Markdown is God's gift to technical writers.
+It's easy to understand, always human-readable, and has the internet-equivalent [lifespan](https://brandur.org/fragments/graceful-degradation-time) of styrofoam.
+For these reasons (and many more), it's a fantastic medium for communication.
+`hrm` exists simply to make Markdown even more usable.
+It consists of simple, easily-extended functionality to automate some of the weaker areas of the format (such as testability of codeblocks).

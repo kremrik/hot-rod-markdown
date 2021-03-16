@@ -1,6 +1,7 @@
-from argparse import ArgumentParser, Namespace
-from os import getcwd, listdir
+from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
+from textwrap import dedent
 from typing import List
+from os import getcwd, listdir
 from os.path import basename, dirname, join, splitext
 import importlib.util
 
@@ -27,8 +28,14 @@ def add_plugin_parsers(parser: ArgumentParser) -> None:
 
         args = _plugin_args(cmd)
         help = _plugin_help(cmd)
+        docs = _plugin_desc(cmd)
         
-        sp = subparsers.add_parser(cli_name, help=help)
+        sp = subparsers.add_parser(
+            cli_name, 
+            help=help,
+            formatter_class=RawDescriptionHelpFormatter,
+            description=docs
+        )
         sp.set_defaults(callback=cmd)
 
         # default arg all _base commands take
@@ -88,6 +95,16 @@ def _plugin_args(obj) -> dict:
 def _plugin_help(obj) -> str:
     attrs = dict(obj.__dict__)
     return attrs.get("__help__", "")
+
+
+def _plugin_desc(obj) -> str:
+    attrs = dict(obj.__dict__)
+    docs = attrs.get("__doc__", "")
+    
+    if docs:
+        return dedent(docs)
+    else:
+        return ""
 
 
 def _arg_name(arg: str) -> str:

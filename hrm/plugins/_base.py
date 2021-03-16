@@ -8,6 +8,7 @@ from typing import Iterable, Optional
 
 class HotRodMarkdown(ABC):
     __help__: str
+    __doc__: str
 
     def __init__(self, path: str, verbose: bool) -> None:
         self.path = path
