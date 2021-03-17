@@ -24,7 +24,7 @@ class HotRodMarkdown(ABC):
     @abstractmethod
     def transform(
         self, md_contents: Generator[str, None, None]
-    ) -> Optional[Union[str, Generator[str, None, None]]]:
+    ) -> Union[str, Generator[str, None, None]]:
         pass
 
     def run(self) -> None:

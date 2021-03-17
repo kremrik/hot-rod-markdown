@@ -35,13 +35,11 @@ class Command(HotRodMarkdown):
     required to be specified.
     """
 
-    __help__ = (
-        "Injects code from files into annotated codeblocks"
-    )
+    __help__ = "Injects files into annotated codeblocks"
 
     def transform(
         self, md_contents: Generator[str, None, None]
-    ) -> Optional[str]:
+    ) -> str:
         md = list(md_contents)
         codeblocks = self.get_codeblocks(md)
         output = self.inject_codeblocks(

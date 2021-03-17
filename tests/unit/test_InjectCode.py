@@ -7,7 +7,9 @@ from textwrap import dedent
 @patch("hrm.plugins.inject_code.Command._resolve_refer")
 @patch("hrm.plugins.inject_code.exists")
 class test_transform(unittest.TestCase):
-    def test_one_refer_block_one_without(self, m_exists, m_read_file):
+    def test_one_refer_block_one_without(
+        self, m_exists, m_read_file
+    ):
         m_exists.return_value = True
         m_read_file.return_value = "foo=1\nprint(foo)\n"
 
@@ -24,7 +26,7 @@ class test_transform(unittest.TestCase):
         markdown = (line for line in markdown)
 
         gold = dedent(
-        """\
+            """\
         # header
         ```python example.py
         foo=1
@@ -34,13 +36,16 @@ class test_transform(unittest.TestCase):
         ```json
         {"foo": 1}
         ```
-        """)
+        """
+        )
 
         ic = Command(path=".", verbose=False)
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
-    def test_refer_block_has_wrong_path(self, m_exists, m_read_file):
+    def test_refer_block_has_wrong_path(
+        self, m_exists, m_read_file
+    ):
         m_exists.return_value = False
 
         markdown = [
@@ -68,10 +73,7 @@ class test_transform(unittest.TestCase):
 # ---------------------------------------------------------
 class test_get_codeblocks(unittest.TestCase):
     def test_no_codeblocks(self):
-        md = [
-            "# header\n",
-            "##subheader"
-        ]
+        md = ["# header\n", "##subheader"]
         gold = []
         output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
@@ -120,7 +122,7 @@ class test_get_codeblocks(unittest.TestCase):
             "```\n",
             "## subheader\n",
             "```json\n",
-            "```"
+            "```",
         ]
         gold = [
             ((2, 3), "python", "example.py"),
@@ -136,7 +138,7 @@ class test_get_codeblocks(unittest.TestCase):
             "```\n",
             "## subheader\n",
             "```json\n",
-            "```"
+            "```",
         ]
         gold = [
             ((2, 3), None, "example.py"),

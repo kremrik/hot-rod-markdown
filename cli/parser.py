@@ -1,7 +1,10 @@
+from hrm.plugins._base import HotRodMarkdown
+
 from argparse import (
     ArgumentParser,
     Namespace,
     RawDescriptionHelpFormatter,
+    _SubParsersAction,
 )
 from textwrap import dedent
 from typing import List
@@ -14,9 +17,14 @@ __all__ = ["cli"]
 
 
 def cli(arguments: List[str]) -> Namespace:
-    parser = ArgumentParser(prog="hrm")
-    add_plugin_parsers(parser)
+    parser = make_parser()
     return parser.parse_args(arguments)
+
+
+def make_parser(prog: str = "hrm") -> ArgumentParser:
+    parser = ArgumentParser(prog=prog)
+    add_plugin_parsers(parser)
+    return parser
 
 
 def add_plugin_parsers(parser: ArgumentParser) -> None:
@@ -27,46 +35,55 @@ def add_plugin_parsers(parser: ArgumentParser) -> None:
 
     for plugin_path in plugin_locs:
         plugin_name = _mod_name_from_path(plugin_path)
-        cli_name = _friendly_plugin_name(plugin_name)
         cmd = _load_module(
             plugin_name, plugin_path
         ).Command
 
-        args = _plugin_args(cmd)
-        help = _plugin_help(cmd)
-        docs = _plugin_desc(cmd)
-
-        sp = subparsers.add_parser(
-            cli_name,
-            help=help,
-            formatter_class=RawDescriptionHelpFormatter,
-            description=docs,
+        add_subparser(
+            subparsers=subparsers,
+            plugin_name=plugin_name,
+            plugin=cmd,
         )
 
-        sp.set_defaults(callback=cmd)
 
-        # default arg all _base commands take
-        sp.add_argument(
-            "path",
-            nargs="?",
-            default=getcwd(),
-            help="Path to directory at which to begin",
-        )
+def add_subparser(
+    subparsers: _SubParsersAction,
+    plugin_name: str,
+    plugin: HotRodMarkdown,
+) -> None:
+    args = _plugin_args(plugin)
+    help = _plugin_help(plugin)
+    docs = _plugin_desc(plugin)
+    cli_name = _friendly_plugin_name(plugin_name)
 
-        sp.add_argument(
-            "-v",
-            "--verbose",
-            action="store_true",
-            default=False,
-        )
+    sp = subparsers.add_parser(
+        cli_name,
+        help=help,
+        formatter_class=RawDescriptionHelpFormatter,
+        description=docs,
+    )
 
-        for arg, typ in args.items():
-            a_name = _arg_name(arg)
-            a_type = _arg_type(typ)
-            req = _arg_required(typ)
-            sp.add_argument(
-                a_name, type=a_type, required=req
-            )
+    sp.set_defaults(callback=plugin)
+
+    sp.add_argument(
+        "path",
+        nargs="?",
+        default=getcwd(),
+        help="Path to directory at which to begin",
+    )
+
+    sp.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+    )
+
+    for arg, typ in args.items():
+        a_name = _arg_name(arg)
+        a_type = _arg_type(typ)
+        req = _arg_required(typ)
+        sp.add_argument(a_name, type=a_type, required=req)
 
 
 def _plugin_locs() -> List[str]:

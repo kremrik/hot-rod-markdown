@@ -39,6 +39,7 @@ black-format :
 	@echo -e 		'------------$(NO_COLOR)'
 	@black $(MODULE) -l $(LINE_LENGTH)
 	@black cli -l $(LINE_LENGTH)
+	@black tests -l $(LINE_LENGTH)
 
 .PHONY: flake8-lint
 flake8-lint :
