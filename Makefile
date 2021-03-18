@@ -29,7 +29,8 @@ type-check :
 	@echo
 	@echo -e '$(BLUE)type-check'
 	@echo -e 		'----------$(NO_COLOR)'
-	@mypy $(MODULE)/*.py
+	@mypy $(MODULE)
+	@mypy cli
 
 .PHONY: black-format
 black-format :
@@ -37,6 +38,8 @@ black-format :
 	@echo -e '$(BLUE)black-format'
 	@echo -e 		'------------$(NO_COLOR)'
 	@black $(MODULE) -l $(LINE_LENGTH)
+	@black cli -l $(LINE_LENGTH)
+	@black tests -l $(LINE_LENGTH)
 
 .PHONY: flake8-lint
 flake8-lint :
@@ -58,7 +61,7 @@ success :
 
 .PHONY: cov
 cov:
-	@python -m pytest --cov=$(MODULE) --cov-config=.coveragerc --cov-report html
+	@python -m pytest --cov=. --cov-config=.coveragerc --cov-report html
 
 .PHONY: coverage
 coverage: cov
