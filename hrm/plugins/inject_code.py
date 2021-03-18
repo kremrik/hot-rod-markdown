@@ -27,8 +27,8 @@ class Command(HotRodMarkdown):
     Code from files can be inserted into md codeblocks by
     annotating them like the below example:
 
-    ```python file.py
-    ```       ^^^^^^^
+    ```python INJECT_CODE(file.py)
+    ```       ^^^^^^^^^^^^^^^^^^^^
 
     The underlined portion reflects a relative reference to
     the file whose contents you wish to inject, which will
