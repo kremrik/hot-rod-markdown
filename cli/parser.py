@@ -1,4 +1,4 @@
-from hrm.plugins._base import HotRodMarkdown
+from cli.loader import load_plugins, command
 
 from argparse import (
     ArgumentParser,
@@ -8,48 +8,43 @@ from argparse import (
 )
 from textwrap import dedent
 from typing import List
-from os import getcwd, listdir
-from os.path import basename, dirname, join, splitext
-import importlib.util
+from os import getcwd, getenv
 
 
 __all__ = ["cli"]
 
 
+external_path = getenv("HRM_PLUGINS")
+
+
 def cli(arguments: List[str]) -> Namespace:
-    parser = make_parser()
+    parser_name = "hrm"
+    plugins = load_plugins(external_path)
+    parser = make_parser(prog=parser_name, plugins=plugins)
     return parser.parse_args(arguments)
 
 
-def make_parser(prog: str = "hrm") -> ArgumentParser:
+def make_parser(
+    prog: str, plugins: List[command]
+) -> ArgumentParser:
     parser = ArgumentParser(prog=prog)
-    add_plugin_parsers(parser)
-    return parser
 
-
-def add_plugin_parsers(parser: ArgumentParser) -> None:
-    plugin_locs = _plugin_locs()
     subparsers = parser.add_subparsers(
         help="sub-command help",
     )
 
-    for plugin_path in plugin_locs:
-        plugin_name = _mod_name_from_path(plugin_path)
-        cmd = _load_module(
-            plugin_name, plugin_path
-        ).Command
-
+    for name, cmd in plugins:
         add_subparser(
             subparsers=subparsers,
-            plugin_name=plugin_name,
+            plugin_name=name,
             plugin=cmd,
         )
 
+    return parser
+
 
 def add_subparser(
-    subparsers: _SubParsersAction,
-    plugin_name: str,
-    plugin: HotRodMarkdown,
+    subparsers: _SubParsersAction, plugin_name: str, plugin
 ) -> None:
     args = _plugin_args(plugin)
     help = _plugin_help(plugin)
@@ -84,31 +79,6 @@ def add_subparser(
         a_type = _arg_type(typ)
         req = _arg_required(typ)
         sp.add_argument(a_name, type=a_type, required=req)
-
-
-def _plugin_locs() -> List[str]:
-    plugins_dir = join(
-        dirname(dirname(__file__)), "hrm/plugins"
-    )
-    plugins = [
-        join(plugins_dir, p)
-        for p in listdir(plugins_dir)
-        if not p.startswith("_") and p.endswith(".py")
-    ]
-    return plugins
-
-
-def _load_module(module_name: str, module_path: str):
-    spec = importlib.util.spec_from_file_location(
-        module_name, module_path
-    )
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)  # type: ignore
-    return mod
-
-
-def _mod_name_from_path(module_path: str) -> str:
-    return splitext(basename(module_path))[0]
 
 
 def _friendly_plugin_name(module_name: str) -> str:
