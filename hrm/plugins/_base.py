@@ -54,5 +54,4 @@ class HotRodMarkdown(ABC):
     def _write(
         self, data: Union[Generator[str, None, None], str]
     ) -> None:
-        # generator still exists here
         fs.write_file(path=self.path, data=data)

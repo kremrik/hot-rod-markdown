@@ -13,5 +13,5 @@ It's easy to understand, always human-readable, and has the internet-equivalent 
 For these reasons (and many more), it's a fantastic medium for communication.
 `hrm` exists simply to make Markdown even more usable.
 It does this by 
-1. offering some nice functionality out of the box
-1. offering an incredibly simple (and easy) plugin model for rapid extensions
+1. offering great quality-of-life functionality right out of the box
+1. offering a simple (and easy) plugin model for rapid extensions
