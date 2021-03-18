@@ -9,7 +9,10 @@ Soup-up your Markdown!
 
 ## Motivation
 Markdown is God's gift to technical writers.
-It's easy to understand, always human-readable, and has the internet-equivalent [lifespan](https://brandur.org/fragments/graceful-degradation-time) of styrofoam.
+It's easy to understand, always human-readable, and has the internet-equivalent 
+<a href="https://brandur.org/fragments/graceful-degradation-time" target="_blank">lifespan</a> 
+of styrofoam.
+
 For these reasons (and many more), it's a fantastic medium for communication.
 `hrm` exists simply to make Markdown even more usable.
 It does this by 
