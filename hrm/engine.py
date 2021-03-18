@@ -1,5 +1,5 @@
 from os import walk
-from os.path import abspath, join
+from os.path import abspath, join, isfile
 from typing import Generator, List, Optional
 
 
@@ -9,9 +9,15 @@ __all__ = ["main"]
 def main(cmd, path: str, verbose: bool, **kwargs) -> None:
     # this could easily be parallelized
     path = abspath(path)
-    for md_file in markdown_finder(path):
-        job = cmd(path=md_file, verbose=verbose, **kwargs)
-        job.run()
+
+    if isfile(path):
+        job = cmd(path=path, verbose=verbose)
+        job.run(**kwargs)
+
+    else:
+        for md_file in markdown_finder(path):
+            job = cmd(path=md_file, verbose=verbose)
+            job.run(**kwargs)
 
 
 # ---------------------------------------------------------

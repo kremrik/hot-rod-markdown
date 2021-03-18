@@ -3,7 +3,7 @@ from hrm.io import fs
 from abc import ABC, abstractmethod
 from os import chdir
 from os.path import dirname
-from typing import Generator, Optional, Union
+from typing import Generator, Union
 
 
 class HotRodMarkdown(ABC):
@@ -23,15 +23,19 @@ class HotRodMarkdown(ABC):
 
     @abstractmethod
     def transform(
-        self, md_contents: Generator[str, None, None]
+        self,
+        md_contents: Generator[str, None, None],
+        **kwargs,
     ) -> Union[str, Generator[str, None, None]]:
         pass
 
-    def run(self) -> None:
+    def run(self, **kwargs) -> None:
         self._chdir()
 
         md_contents = self._read()
-        xform_results = self.transform(md_contents)
+        xform_results = self.transform(
+            md_contents, **kwargs
+        )
 
         if not xform_results:
             return
@@ -50,4 +54,5 @@ class HotRodMarkdown(ABC):
     def _write(
         self, data: Union[Generator[str, None, None], str]
     ) -> None:
+        # generator still exists here
         fs.write_file(path=self.path, data=data)

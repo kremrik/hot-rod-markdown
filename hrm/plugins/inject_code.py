@@ -38,7 +38,9 @@ class Command(HotRodMarkdown):
     __help__ = "Injects files into annotated codeblocks"
 
     def transform(
-        self, md_contents: Generator[str, None, None]
+        self,
+        md_contents: Generator[str, None, None],
+        **kwargs,
     ) -> str:
         md = list(md_contents)
         codeblocks = self.get_codeblocks(md)
