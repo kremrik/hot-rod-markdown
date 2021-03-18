@@ -13,7 +13,7 @@ There are three things required to create a plugin:
 That's it. 
 See below for a short and sweet example of the `change_headings.py` plugin demonstrating some additional features.
 
-```python change_headings.py
+```python INJECT_CODE(change_headings.py)
 from hrm.plugins._base import HotRodMarkdown
 
 from typing import Generator, Union

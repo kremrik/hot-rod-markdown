@@ -15,7 +15,7 @@ class test_transform(unittest.TestCase):
 
         markdown = [
             "# header\n",
-            "```python example.py\n",
+            "```python INJECT_CODE(example.py)\n",
             "foo=1\n",
             "```\n",
             "## subheader\n",
@@ -28,7 +28,7 @@ class test_transform(unittest.TestCase):
         gold = dedent(
             """\
         # header
-        ```python example.py
+        ```python INJECT_CODE(example.py)
         foo=1
         print(foo)
         ```
@@ -50,7 +50,7 @@ class test_transform(unittest.TestCase):
 
         markdown = [
             "# header\n",
-            "```python example.py\n",
+            "```python INJECT_CODE(example.py)\n",
             "foo=1\n",
             "```\n",
             "## subheader\n",
@@ -105,19 +105,19 @@ class test_get_codeblocks(unittest.TestCase):
     def test_one_codeblock(self):
         md = [
             "# header\n",
-            "```python example.py\n",
+            "```python INJECT_CODE(example.py)\n",
             "foo=1\n",
             "```\n",
             "## subheader\n",
         ]
-        gold = [((2, 3), "python", "example.py")]
+        gold = [((2, 3), None, "example.py")]
         output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_mult_codeblock(self):
         md = [
             "# header\n",
-            "```python example.py\n",
+            "```python INJECT_CODE(example.py)\n",
             "foo=1\n",
             "```\n",
             "## subheader\n",
@@ -125,7 +125,7 @@ class test_get_codeblocks(unittest.TestCase):
             "```",
         ]
         gold = [
-            ((2, 3), "python", "example.py"),
+            ((2, 3), None, "example.py"),
         ]
         output = list(Command.get_codeblocks(md))
         self.assertEqual(gold, output)
@@ -133,7 +133,7 @@ class test_get_codeblocks(unittest.TestCase):
     def test_codeblock_w_only_refer(self):
         md = [
             "# header\n",
-            "```example.py\n",
+            "```INJECT_CODE(example.py)\n",
             "foo=1\n",
             "```\n",
             "## subheader\n",

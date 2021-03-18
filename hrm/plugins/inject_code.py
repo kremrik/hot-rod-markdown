@@ -1,6 +1,7 @@
 from hrm.io.fs import read_file
 from hrm.plugins._base import HotRodMarkdown
 
+import re
 from collections import namedtuple
 from typing import (
     Generator,
@@ -88,22 +89,13 @@ class Command(HotRodMarkdown):
     def _describe_codeblock(
         opening_line: str,
     ) -> Tuple[Optional[str], Optional[str]]:
-        remove_ticks = opening_line.strip().replace(
-            "```", ""
-        )
-        chunks = remove_ticks.split()
+        regex = re.compile(r"INJECT_CODE\((.*?)\)")
+        path = regex.findall(opening_line)
 
-        if len(chunks) == 2:
-            # appeasing mypy
-            return (chunks[0], chunks[1])
-
-        if len(chunks) == 0:
-            return (None, None)
-
-        if "." not in chunks[0]:
-            return (chunks[0], None)
+        if path:
+            return (None, path[0])
         else:
-            return (None, chunks[0])
+            return (None, None)
 
     @staticmethod
     def inject_codeblocks(
