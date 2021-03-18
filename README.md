@@ -22,10 +22,29 @@ It does this by
 ## Usage
 `hrm` is a command-line tool primarily, but as mentioned above it offers generic/standard functionality as well as extensible functionality
 
-### Standard functionality
+#### Standard functionality
 Run `hrm -h` for a listing of available commands
 
-### Extended functionality
+#### Extended functionality
 YOu can create your own plugins (see [this guide](hrm/plugins/README.md)) and point `hrm` to their location using the environment variable `HRM_PLUGINS`.
 This path is expected to be a directory.
 Once your plugin is created and the env var is set, running `hrm -h` again will now display the new option.
+
+## Example
+One of the things Markdown struggles with a little bit is codeblocks.
+Yes, they're formatted nicely in GitHub (for example), but it's generally a manual process to put code there and very inconvenient to update and test it.
+`hrm` supplies you with a command called `inject-code` that allows you annotate a codeblock like the example below:
+````
+```python INJECT_CODE(example.py)
+```
+````
+The `INJECT_CODE([filepath])` annotation tells `hrm` to load the file referenced by the `filepath` and insert the contents as-is between the triple backticks of the codeblock.
+This will be done recursively from your `pwd` when run like
+```
+hrm inject-code
+```
+or (optionally) from a given path:
+```
+hrm inject-code path/to/dir-or-file
+```
+You can see an example of this [here](hrm/plugins/README.md))
