@@ -17,6 +17,7 @@ It does this by
 1. offering a simple (and easy) plugin model for rapid extensions
 
 ## Example
+Let's look at one example of a command `hrm` exposes by default.
 Suppose you have a nice README.md where you wish to show a code snippet for your users:
 
 ````
@@ -32,7 +33,7 @@ def greet(name):
 Great!
 Your users have an example of how to write a quick function in Python.
 Wouldn't it suck though if, in your haste to write that example, you accidentally used different quotes in the return?
-Unfortunately, the only way you'd know that is if you tested it, which means copying and pasting it into your REPL, or into a file to execute.
+Unfortunately, the only way you'd know that is if you tested it, which means copying and pasting it into your REPL, or into a file to manually execute.
 Now imagine having dozens of examples like this.
 `hrm` offers you a simple framework for this very problem.
 Take a look at the new example below:
@@ -52,13 +53,13 @@ def greet(name):
     return f"Hello, {name}"
 ```
 
-and then run
+and then in the same directory run
 
 ```
 hrm inject-code
 ```
 
-`hrm` will search the Markdown file for any `INJECT_CODE` annotations and insert the code from the corresponding file directly into the codeblock yielding:
+`hrm` will search the Markdown file for any `INJECT_CODE` annotations and insert the code from the corresponding file directly into the codeblock, yielding:
 
 ````
 # Title
