@@ -29,9 +29,7 @@ def make_parser(
 ) -> ArgumentParser:
     parser = ArgumentParser(prog=prog)
 
-    subparsers = parser.add_subparsers(
-        help="sub-command help",
-    )
+    subparsers = parser.add_subparsers()
 
     for name, cmd in plugins:
         add_subparser(

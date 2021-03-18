@@ -1,5 +1,5 @@
 from os import walk
-from os.path import join
+from os.path import abspath, join
 from typing import Generator, List, Optional
 
 
@@ -8,6 +8,7 @@ __all__ = ["main"]
 
 def main(cmd, path: str, verbose: bool, **kwargs) -> None:
     # this could easily be parallelized
+    path = abspath(path)
     for md_file in markdown_finder(path):
         job = cmd(path=md_file, verbose=verbose, **kwargs)
         job.run()

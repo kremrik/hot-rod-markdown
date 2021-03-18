@@ -1,46 +1,52 @@
-from cli.parser import cli
+from cli.parser import make_parser
 from hrm.plugins.inject_code import Command
 
-from argparse import ArgumentParser, _SubParsersAction
-from typing import List
 import unittest
-from unittest.mock import patch
+from argparse import ArgumentParser, _SubParsersAction
+from textwrap import dedent
+from typing import List, Optional
 
 
-@patch("cli.parser.getcwd", return_value="./")
-class test_cli(unittest.TestCase):
-    def test_default_path(self, m_getcwd):
-        arguments = ["inject-code"]
-
-        gold_rest = {
-            "path": "./",
-            "verbose": False,
-        }
-        gold_callback = Command
-
-        output = cli(arguments).__dict__
-        callback = output["callback"]
-        rest = {
-            k: v
-            for k, v in output.items()
-            if k != "callback"
-        }
-
-        self.assertEqual(
-            gold_callback.__name__, callback.__name__
+class test_make_parser(unittest.TestCase):
+    def test(self):
+        output = make_parser(
+            prog="test", plugins=[("inject_code", Command)]
         )
-        self.assertEqual(gold_rest, rest)
+        self.assertEqual(output.prog, "test")
+
+        subparsers = get_subparsers(output)
+        self.assertEqual(len(subparsers), 1)
+
+        subparser = subparsers[0]
+        desc = subparser_description(subparser)
+        help = subparser_help(subparser)
+        self.assertEqual(desc, dedent(Command.__doc__))
+        self.assertEqual(help, Command.__help__)
 
 
 def get_subparsers(
     parser: ArgumentParser,
 ) -> List[_SubParsersAction]:
-    # sp.choices['inject-code'].description
     return [
         p
         for p in parser._subparsers._actions
         if isinstance(p, _SubParsersAction)
     ]
+
+
+def subparser_description(
+    subparser: _SubParsersAction,
+) -> Optional[str]:
+    sp_name = list(subparser.choices.keys())[0]
+    desc = subparser.choices[sp_name].description
+    return desc
+
+
+def subparser_help(
+    subparser: _SubParsersAction,
+) -> Optional[str]:
+    help = subparser.__dict__["_choices_actions"][0].help
+    return help
 
 
 if __name__ == "__main__":
