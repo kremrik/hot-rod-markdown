@@ -7,19 +7,17 @@ from argparse import (
     _SubParsersAction,
 )
 from textwrap import dedent
-from typing import List
+from typing import List, Optional
 from os import getcwd, getenv
+from os.path import abspath
 
 
 __all__ = ["cli"]
 
 
-external_path = getenv("HRM_PLUGINS")
-
-
 def cli(arguments: List[str]) -> Namespace:
     parser_name = "hrm"
-    plugins = load_plugins(external_path)
+    plugins = load_plugins(_get_external_path())
     parser = make_parser(prog=parser_name, plugins=plugins)
     return parser.parse_args(arguments)
 
@@ -124,3 +122,11 @@ def _arg_required(arg_type) -> bool:
         return False
 
     return True
+
+
+def _get_external_path() -> Optional[str]:
+    external_path = getenv("HRM_PLUGINS")
+    if not external_path:
+        return None
+
+    return abspath(external_path)
