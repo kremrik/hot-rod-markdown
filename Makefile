@@ -68,7 +68,11 @@ success :
 
 .PHONY: cov
 cov:
-	@python -m pytest tests/unit --cov=hrm --cov=cli --cov-config=.coveragerc --cov-report html
+	@python -m pytest tests/unit \
+		--cov=$(MODULE) \
+		--cov=cli \
+		--cov-config=.coveragerc \
+		--cov-report html
 
 .PHONY: coverage
 coverage: cov
