@@ -12,9 +12,25 @@ Markdown is God's gift to technical writers.
 It's easy to understand, always human-readable, and has the internet-equivalent [lifespan](https://brandur.org/fragments/graceful-degradation-time) of styrofoam.
 For these reasons (and many more), it's a fantastic medium for communication.
 `hrm` exists simply to make Markdown even more usable.
-It does this by 
-1. offering great quality-of-life functionality right out of the box
-1. offering a simple (and easy) plugin model for rapid extensions
+
+## Concepts
+`hrm` gives you two primary ways of usage:
+1. The built-in commands
+    ```
+    $ hrm -h
+    usage: hrm [-h] {change-headings,inject-code} ...
+
+    positional arguments:
+    {change-headings,inject-code}
+        change-headings     Adds/removes heading level(s)
+        inject-code         Injects files into annotated codeblocks
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    ```
+1. The plugin model found [here](hrm/plugins/README.md)
+
+Plugins provide a simple, easy way of essentially creating your own "DSL's" for Markdown.
 
 ## Example
 Let's look at one example of a command `hrm` exposes by default.
