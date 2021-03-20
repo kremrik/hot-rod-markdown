@@ -45,7 +45,6 @@ class HotRodMarkdown(ABC):
             return
 
         self._write(xform_results)
-        LOGGER.info(f"Changed: {self.path}")
 
     def _chdir(self) -> None:
         LOGGER.info(f"Setting pwd to {self.directory}")
@@ -58,5 +57,5 @@ class HotRodMarkdown(ABC):
     def _write(
         self, data: Union[Generator[str, None, None], str]
     ) -> None:
-        LOGGER.info(f"Reading {self.path}")
+        LOGGER.info(f"Writing {self.path}")
         fs.write_file(path=self.path, data=data)

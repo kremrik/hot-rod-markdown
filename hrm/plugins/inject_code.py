@@ -48,6 +48,10 @@ class Command(HotRodMarkdown):
         output = self.inject_codeblocks(
             blocks=codeblocks, markdown=md
         )
+
+        if "".join(md) == output:
+            return ""
+
         return output
 
     @staticmethod

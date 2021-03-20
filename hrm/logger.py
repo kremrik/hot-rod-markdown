@@ -8,7 +8,7 @@ def logger(name: str):
     _logger = logging.getLogger(name)
     handler = logging.StreamHandler()
     formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(pathname)s | %(message)s"  # noqa E501
+        "%(asctime)s | %(levelname)s | %(message)s"
     )
     handler.setFormatter(formatter)
     _logger.addHandler(handler)
