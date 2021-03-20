@@ -92,13 +92,3 @@ Now, you're free to test that example file like any other Python code.
 
 ## Installation
 TBD
-
-## Usage
-
-#### Standard functionality
-Run `hrm -h` for a listing of available commands
-
-#### Extended functionality
-You can create your own plugins (see [this guide](hrm/plugins/README.md)) and point `hrm` to their location using the environment variable `HRM_PLUGINS`.
-This path is expected to be a directory.
-Once your plugin is created and the env var is set, running `hrm -h` again will now display the new option.

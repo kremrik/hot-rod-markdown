@@ -55,6 +55,11 @@ class Command(HotRodMarkdown):
                 yield new_line
 ```
 
+### External plugins directory
+You can store your own plugins in their own directory anywhere you like. 
+Just point `hrm` to their location using the environment variable `HRM_PLUGINS`.
+Once your plugin is created and the env var is set, running `hrm -h` again will now display the new option.
+
 ### Optionally...
 There are several things you'll notice about the above example that aren't strictly required:
 
@@ -63,7 +68,6 @@ You can create a `__help__` attribute for your plugin to provide the user with a
 
 #### Documentation/description
 Any docstrings you write at the plugin's class-level will be incorporated into the CLI's subcommand `hrm [sub-cmd] -h` option.
-
 
 #### Additional CLI arguments
 If your plugin requires additional arguments from the command line, you can simply use class annotations with type hints (ie, `foo: Optional[int]` for an option argument).
