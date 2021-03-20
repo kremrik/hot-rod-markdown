@@ -16,6 +16,13 @@ unit-tests :
 	@echo -e '$(BLUE)unit-tests'
 	@echo -e        '----------$(NO_COLOR)'
 	@python3 -m pytest tests/unit
+
+.PHONY: functional-tests
+functional-tests :
+	@echo
+	@echo -e '$(BLUE)functional-tests'
+	@echo -e        '----------$(NO_COLOR)'
+	@python3 -m pytest tests/functional
 	
 .PHONY: code-coverage
 code-coverage : cov
@@ -61,7 +68,11 @@ success :
 
 .PHONY: cov
 cov:
-	@python -m pytest --cov=. --cov-config=.coveragerc --cov-report html
+	@python -m pytest tests/unit \
+		--cov=$(MODULE) \
+		--cov=cli \
+		--cov-config=.coveragerc \
+		--cov-report html
 
 .PHONY: coverage
 coverage: cov

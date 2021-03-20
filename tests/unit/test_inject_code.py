@@ -39,7 +39,7 @@ class test_transform(unittest.TestCase):
         """
         )
 
-        ic = Command(path=".", verbose=False)
+        ic = Command(path=".")
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
@@ -61,11 +61,36 @@ class test_transform(unittest.TestCase):
 
         gold = ""
 
-        ic = Command(path=".", verbose=False)
+        ic = Command(path=".")
         with self.assertWarns(UserWarning):
             output = ic.transform(markdown)
             self.assertEqual(gold, output)
 
+        self.assertEqual(gold, output)
+
+    def test_no_changes_required(
+        self, m_exists, m_read_file
+    ):
+        m_exists.return_value = True
+        m_read_file.return_value = "foo=1\nprint(foo)\n"
+
+        markdown = [
+            "# header\n",
+            "```python INJECT_CODE(example.py)\n",
+            "foo=1\n",
+            "print(foo)\n",
+            "```\n",
+            "## subheader\n",
+            "```json\n",
+            '{"foo": 1}\n',
+            "```\n",
+        ]
+        markdown = (line for line in markdown)
+
+        gold = ""
+
+        ic = Command(path=".")
+        output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
 

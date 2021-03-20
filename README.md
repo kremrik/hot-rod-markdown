@@ -12,9 +12,25 @@ Markdown is God's gift to technical writers.
 It's easy to understand, always human-readable, and has the internet-equivalent [lifespan](https://brandur.org/fragments/graceful-degradation-time) of styrofoam.
 For these reasons (and many more), it's a fantastic medium for communication.
 `hrm` exists simply to make Markdown even more usable.
-It does this by 
-1. offering great quality-of-life functionality right out of the box
-1. offering a simple (and easy) plugin model for rapid extensions
+
+## Concepts
+`hrm` gives you two primary ways of usage:
+1. The built-in commands
+    ```
+    $ hrm -h
+    usage: hrm [-h] {change-headings,inject-code} ...
+
+    positional arguments:
+    {change-headings,inject-code}
+        change-headings     Adds/removes heading level(s)
+        inject-code         Injects files into annotated codeblocks
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    ```
+1. The plugin model found [here](hrm/plugins/README.md)
+
+Plugins provide a simple, easy way of essentially creating your own "DSL's" for Markdown.
 
 ## Example
 Let's look at one example of a command `hrm` exposes by default.
@@ -75,14 +91,4 @@ Now, you're free to test that example file like any other Python code.
 
 
 ## Installation
-```instructions```
-
-## Usage
-
-#### Standard functionality
-Run `hrm -h` for a listing of available commands
-
-#### Extended functionality
-You can create your own plugins (see [this guide](hrm/plugins/README.md)) and point `hrm` to their location using the environment variable `HRM_PLUGINS`.
-This path is expected to be a directory.
-Once your plugin is created and the env var is set, running `hrm -h` again will now display the new option.
+TBD

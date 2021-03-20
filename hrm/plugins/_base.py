@@ -1,4 +1,5 @@
 from hrm.io import fs
+from hrm.logger import logger
 
 from abc import ABC, abstractmethod
 from os import chdir
@@ -6,13 +7,15 @@ from os.path import dirname
 from typing import Generator, Union
 
 
+LOGGER = logger(__file__)
+
+
 class HotRodMarkdown(ABC):
     __help__: str
     __doc__: str
 
-    def __init__(self, path: str, verbose: bool) -> None:
+    def __init__(self, path: str) -> None:
         self.path = path
-        self.verbose = verbose
         self._directory = ""
 
     @property
@@ -38,20 +41,21 @@ class HotRodMarkdown(ABC):
         )
 
         if not xform_results:
+            LOGGER.info("No changes to write")
             return
 
         self._write(xform_results)
 
-        if self.verbose:
-            print(f"Changed: {self.path}")
-
     def _chdir(self) -> None:
+        LOGGER.info(f"Setting pwd to {self.directory}")
         chdir(self.directory)
 
     def _read(self) -> Generator[str, None, None]:
+        LOGGER.info(f"Reading {self.path}")
         return fs.read_file(self.path)
 
     def _write(
         self, data: Union[Generator[str, None, None], str]
     ) -> None:
+        LOGGER.info(f"Writing {self.path}")
         fs.write_file(path=self.path, data=data)
