@@ -19,7 +19,7 @@ class test_inject_code(unittest.TestCase):
         copyfile("subdir/README.bak", "subdir/README.md")
 
     def test(self):
-        cmd = "hrm inject-code".split()
+        cmd = "hrm inject-code -v".split()
         Popen(cmd)
 
         sleep(0.05)

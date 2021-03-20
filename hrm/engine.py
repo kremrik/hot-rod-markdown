@@ -1,3 +1,4 @@
+import logging
 from os import walk
 from os.path import abspath, join, isfile
 from typing import Generator, List, Optional
@@ -7,16 +8,21 @@ __all__ = ["main"]
 
 
 def main(cmd, path: str, verbose: bool, **kwargs) -> None:
+    level = logging.ERROR
+    if verbose:
+        level = logging.INFO
+    logging.getLogger().setLevel(level)
+
     # this could easily be parallelized
     path = abspath(path)
 
     if isfile(path):
-        job = cmd(path=path, verbose=verbose)
+        job = cmd(path=path)
         job.run(**kwargs)
 
     else:
         for md_file in markdown_finder(path):
-            job = cmd(path=md_file, verbose=verbose)
+            job = cmd(path=md_file)
             job.run(**kwargs)
 
 

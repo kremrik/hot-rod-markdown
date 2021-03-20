@@ -19,7 +19,7 @@ class test_transform(unittest.TestCase):
             "text 2",
         ]
 
-        cmd = Command(".", False)
+        cmd = Command(".")
         output = list(cmd.transform(md, change=0))
         self.assertEqual(gold, output)
 
@@ -39,7 +39,7 @@ class test_transform(unittest.TestCase):
             "text 2",
         ]
 
-        cmd = Command(".", False)
+        cmd = Command(".")
         output = list(cmd.transform(md, change=1))
         self.assertEqual(gold, output)
 
@@ -59,7 +59,7 @@ class test_transform(unittest.TestCase):
             "text 2",
         ]
 
-        cmd = Command(".", False)
+        cmd = Command(".")
         output = list(cmd.transform(md, change=-1))
         self.assertEqual(gold, output)
 
