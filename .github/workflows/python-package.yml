@@ -5,9 +5,9 @@ name: Python package
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, dev ]
 
 jobs:
   build:
@@ -42,4 +42,3 @@ jobs:
       run: make flake8-lint
     - name: functional-tests
       run: make functional-tests
-    
