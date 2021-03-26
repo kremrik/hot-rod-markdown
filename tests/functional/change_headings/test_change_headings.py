@@ -22,7 +22,7 @@ class test_change_headings_decrease(unittest.TestCase):
         copyfile("sub_dir/README.bak", "sub_dir/README.md")
 
     def test(self):
-        cmd = "hrm change-headings --change -1 -v".split()
+        cmd = "hrm change-headings --change 1 -v".split()
         Popen(cmd)
 
         sleep(0.15)
