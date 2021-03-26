@@ -13,7 +13,7 @@ from warnings import warn
 from os.path import exists
 
 
-__all__ = ["Command"]
+__all__ = ["InjectCode"]
 
 
 codeblock = namedtuple(
@@ -22,7 +22,7 @@ codeblock = namedtuple(
 )
 
 
-class Command(HotRodMarkdown):
+class InjectCode(HotRodMarkdown):
     """
     Code from files can be inserted into md codeblocks by
     annotating them like the below example:
@@ -72,7 +72,7 @@ class Command(HotRodMarkdown):
                 (
                     language,
                     refers_to,
-                ) = Command._describe_codeblock(line)
+                ) = InjectCode._describe_codeblock(line)
 
             else:
                 range_end = pos
@@ -107,25 +107,25 @@ class Command(HotRodMarkdown):
         markdown: List[str],
     ) -> str:
         existing_blocks = [
-            b for b in blocks if Command._file_exists(b)
+            b for b in blocks if InjectCode._file_exists(b)
         ]
         sorted_blocks = sorted(
             existing_blocks, key=lambda x: x.range[0]
         )
 
-        chunks = Command._partition_md(
+        chunks = InjectCode._partition_md(
             blocks=sorted_blocks, markdown=markdown
         )
 
         code = [
-            Command._resolve_refer(c)
+            InjectCode._resolve_refer(c)
             for c in sorted_blocks
         ]
 
         if not code:
             return ""
 
-        md_output = Command._interlock(chunks, code)
+        md_output = InjectCode._interlock(chunks, code)
 
         return "".join(md_output)
 

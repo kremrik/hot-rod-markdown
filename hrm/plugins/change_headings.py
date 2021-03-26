@@ -3,7 +3,7 @@ from hrm.plugins._base import HotRodMarkdown
 from typing import Generator, Union
 
 
-class Command(HotRodMarkdown):
+class ChangeHeadings(HotRodMarkdown):
     """
     Takes `change` as a required input, which represents
     the change in the number of heading '#' you wish to

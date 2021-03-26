@@ -1,3 +1,7 @@
+from hrm.io.fs import read_file
+
+import ast
+import re
 from collections import namedtuple
 from typing import List, Optional
 from os import listdir
@@ -32,10 +36,15 @@ def _load_plugins(path: str) -> List[command]:
 
     plugins = []
     for plugin_path in plugin_locs:
-        plugin_name = _mod_name_from_path(plugin_path)
-        cmd = _load_module(
-            plugin_name, plugin_path
-        ).Command
+        # plugin_name = _mod_name_from_path(plugin_path)
+        module_ast = _path_to_ast(plugin_path)
+        class_name = _plugin_class_name_from_ast(
+            module_ast
+        )
+        plugin_name = _plugin_name_from_class(class_name)
+
+        module = _load_module(plugin_name, plugin_path)
+        cmd = getattr(module, class_name)
         plugins.append(command(plugin_name, cmd))
 
     return plugins
@@ -60,5 +69,30 @@ def _load_module(module_name: str, module_path: str):
     return mod
 
 
-def _mod_name_from_path(module_path: str) -> str:
-    return splitext(basename(module_path))[0]
+def _path_to_ast(path: str) -> ast.Module:
+    mod = "".join(read_file(path))
+    return ast.parse(mod)
+
+
+def _plugin_class_name_from_ast(module: ast.Module) -> str:
+    classes = [
+        c
+        for c in module.body
+        if isinstance(c, ast.ClassDef)
+    ]
+
+    hrm_classes = [
+        h
+        for h in classes
+        if h.bases[0].id == "HotRodMarkdown"  # type: ignore
+    ]
+
+    plugin_name = hrm_classes[0].name  # use first
+
+    return plugin_name
+
+
+def _plugin_name_from_class(classname: str) -> str:
+    return re.sub(
+        r"(?<!^)(?=[A-Z])", "-", classname
+    ).lower()
