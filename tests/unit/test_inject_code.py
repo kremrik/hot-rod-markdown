@@ -1,10 +1,11 @@
-from hrm.plugins.inject_code import Command
+from hrm.plugins.inject_code import InjectCode
+
 import unittest
 from unittest.mock import patch
 from textwrap import dedent
 
 
-@patch("hrm.plugins.inject_code.Command._resolve_refer")
+@patch("hrm.plugins.inject_code.InjectCode._resolve_refer")
 @patch("hrm.plugins.inject_code.exists")
 class test_transform(unittest.TestCase):
     def test_one_refer_block_one_without(
@@ -39,7 +40,7 @@ class test_transform(unittest.TestCase):
         """
         )
 
-        ic = Command(path=".")
+        ic = InjectCode(path=".")
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
@@ -61,7 +62,7 @@ class test_transform(unittest.TestCase):
 
         gold = ""
 
-        ic = Command(path=".")
+        ic = InjectCode(path=".")
         with self.assertWarns(UserWarning):
             output = ic.transform(markdown)
             self.assertEqual(gold, output)
@@ -89,7 +90,7 @@ class test_transform(unittest.TestCase):
 
         gold = ""
 
-        ic = Command(path=".")
+        ic = InjectCode(path=".")
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
@@ -100,7 +101,7 @@ class test_get_codeblocks(unittest.TestCase):
     def test_no_codeblocks(self):
         md = ["# header\n", "##subheader"]
         gold = []
-        output = list(Command.get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock_no_language_no_refer(self):
@@ -112,7 +113,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = []
-        output = list(Command.get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock_no_refer(self):
@@ -124,7 +125,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = []
-        output = list(Command.get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_one_codeblock(self):
@@ -136,7 +137,7 @@ class test_get_codeblocks(unittest.TestCase):
             "## subheader\n",
         ]
         gold = [((2, 3), None, "example.py")]
-        output = list(Command.get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_mult_codeblock(self):
@@ -152,7 +153,7 @@ class test_get_codeblocks(unittest.TestCase):
         gold = [
             ((2, 3), None, "example.py"),
         ]
-        output = list(Command.get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
     def test_codeblock_w_only_refer(self):
@@ -168,7 +169,7 @@ class test_get_codeblocks(unittest.TestCase):
         gold = [
             ((2, 3), None, "example.py"),
         ]
-        output = list(Command.get_codeblocks(md))
+        output = list(InjectCode.get_codeblocks(md))
         self.assertEqual(gold, output)
 
 

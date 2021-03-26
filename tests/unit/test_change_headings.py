@@ -1,4 +1,5 @@
-from hrm.plugins.change_headings import Command
+from hrm.plugins.change_headings import ChangeHeadings
+
 import unittest
 
 
@@ -19,7 +20,7 @@ class test_transform(unittest.TestCase):
             "text 2",
         ]
 
-        cmd = Command(".")
+        cmd = ChangeHeadings(".")
         output = list(cmd.transform(md, change=0))
         self.assertEqual(gold, output)
 
@@ -39,7 +40,7 @@ class test_transform(unittest.TestCase):
             "text 2",
         ]
 
-        cmd = Command(".")
+        cmd = ChangeHeadings(".")
         output = list(cmd.transform(md, change=1))
         self.assertEqual(gold, output)
 
@@ -59,7 +60,7 @@ class test_transform(unittest.TestCase):
             "text 2",
         ]
 
-        cmd = Command(".")
+        cmd = ChangeHeadings(".")
         output = list(cmd.transform(md, change=-1))
         self.assertEqual(gold, output)
 

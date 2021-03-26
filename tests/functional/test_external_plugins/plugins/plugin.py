@@ -3,13 +3,13 @@ from hrm.plugins._base import HotRodMarkdown
 from typing import Generator, Union
 
 
-class ChangeHeadings(HotRodMarkdown):
+class TestPlugin(HotRodMarkdown):
     """
     Takes `change` as a required input, which represents
     the change in the number of heading '#' you wish to
     apply to each heading. For example:
 
-    hrm change-headings --change 1
+    hrm test-plugin --change 1
 
     would add one '#' to each heading
     """

@@ -1,3 +1,5 @@
+from tests.functional.utils import file_contents
+
 import unittest
 from os import chdir
 from os.path import dirname
@@ -6,11 +8,9 @@ from subprocess import Popen
 from time import sleep
 
 
-chdir(dirname(__file__))
-
-
 class test_inject_code(unittest.TestCase):
     def setUp(self) -> None:
+        chdir(dirname(__file__))
         copyfile("README.bak", "README.md")
         copyfile("subdir/README.bak", "subdir/README.md")
 
@@ -22,19 +22,13 @@ class test_inject_code(unittest.TestCase):
         cmd = "hrm inject-code -v".split()
         Popen(cmd)
 
-        sleep(0.05)
+        sleep(0.15)
 
         md1_output = file_contents("README.md")
         md2_output = file_contents("subdir/README.md")
 
         md1_gold = file_contents("README.gold")
-        md2_gold = file_contents("subdir/README.md")
+        md2_gold = file_contents("subdir/README.gold")
 
         self.assertEqual(md1_output, md1_gold)
         self.assertEqual(md2_output, md2_gold)
-
-
-def file_contents(path: str) -> str:
-    with open(path, "r") as f:
-        data = f.read()
-    return data

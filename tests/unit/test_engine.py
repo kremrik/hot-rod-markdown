@@ -1,5 +1,5 @@
 from hrm.engine import markdown_finder
-from os.path import join
+
 import unittest
 from unittest.mock import patch
 

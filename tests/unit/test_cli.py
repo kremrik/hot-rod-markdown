@@ -1,5 +1,5 @@
 from cli.parser import make_parser
-from hrm.plugins.inject_code import Command
+from hrm.plugins.inject_code import InjectCode
 
 import unittest
 from argparse import ArgumentParser, _SubParsersAction
@@ -10,7 +10,8 @@ from typing import List, Optional
 class test_make_parser(unittest.TestCase):
     def test(self):
         output = make_parser(
-            prog="test", plugins=[("inject_code", Command)]
+            prog="test",
+            plugins=[("inject_code", InjectCode)],
         )
         self.assertEqual(output.prog, "test")
 
@@ -20,8 +21,8 @@ class test_make_parser(unittest.TestCase):
         subparser = subparsers[0]
         desc = subparser_description(subparser)
         help = subparser_help(subparser)
-        self.assertEqual(desc, dedent(Command.__doc__))
-        self.assertEqual(help, Command.__help__)
+        self.assertEqual(desc, dedent(InjectCode.__doc__))
+        self.assertEqual(help, InjectCode.__help__)
 
 
 def get_subparsers(

@@ -5,9 +5,8 @@ Each plugin acts on the contents of a single Markdown file (as a generator/strea
 The plugin is dynamically loaded by the CLI, which uses a prettified module name as the subcommand.
 
 ### Requirements
-There are three things required to create a plugin:
-1. inherit from the `_base.HotRodMarkdown` class
-1. name the class `Command`
+There are only two things required to create a plugin:
+1. inherit from the `hrm.plugins._base.HotRodMarkdown` class
 1. implement a single method (`transform`)
 
 That's it. 
@@ -19,7 +18,7 @@ from hrm.plugins._base import HotRodMarkdown
 from typing import Generator, Union
 
 
-class Command(HotRodMarkdown):
+class ChangeHeadings(HotRodMarkdown):
     """
     Takes `change` as a required input, which represents
     the change in the number of heading '#' you wish to
