@@ -1,4 +1,5 @@
 from hrm.plugins.inject_code import Command
+
 import unittest
 from unittest.mock import patch
 from textwrap import dedent

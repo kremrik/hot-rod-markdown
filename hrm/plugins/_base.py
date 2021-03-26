@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from os import chdir
 from os.path import dirname
 from typing import Generator, Union
+from collections.abc import Iterator
 
 
 LOGGER = logger(__file__)
@@ -39,6 +40,12 @@ class HotRodMarkdown(ABC):
         xform_results = self.transform(
             md_contents, **kwargs
         )
+
+        if not isinstance(xform_results, (str, Iterator)):
+            typ = type(xform_results)
+            msg = f"Output of `transform` must be a str or generator, not {typ}"  # noqa E501
+            LOGGER.error(msg)
+            raise ValueError(msg)
 
         if not xform_results:
             LOGGER.info("No changes to write")

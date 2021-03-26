@@ -22,7 +22,7 @@ functional-tests :
 	@echo
 	@echo -e '$(BLUE)functional-tests'
 	@echo -e        '----------$(NO_COLOR)'
-	@python3 -m pytest tests/functional
+	@python3 -m pytest --rootdir=tests/functional tests/functional
 	
 .PHONY: code-coverage
 code-coverage : cov
