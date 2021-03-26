@@ -1,7 +1,7 @@
 from tests.functional.utils import file_contents
 
 import unittest
-from os import chdir
+from os import chdir, environ
 from os.path import dirname
 from shutil import copyfile
 from subprocess import Popen
@@ -11,6 +11,8 @@ from time import sleep
 class test_change_headings_decrease(unittest.TestCase):
     def setUp(self) -> None:
         chdir(dirname(__file__))
+        environ["HRM_PLUGINS"] = "plugins"
+
         copyfile("README.bak", "README.md")
         copyfile("sub_dir/README.bak", "sub_dir/README.md")
 
@@ -19,7 +21,7 @@ class test_change_headings_decrease(unittest.TestCase):
         copyfile("sub_dir/README.bak", "sub_dir/README.md")
 
     def test(self):
-        cmd = "hrm change-headings --change 1 -v".split()
+        cmd = "hrm test-plugin --change 1 -v".split()
         Popen(cmd)
 
         sleep(0.15)
