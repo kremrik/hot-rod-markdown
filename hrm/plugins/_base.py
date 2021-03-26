@@ -11,6 +11,9 @@ from collections.abc import Iterator
 LOGGER = logger(__file__)
 
 
+LOGGER = logger(__file__)
+
+
 class HotRodMarkdown(ABC):
     __help__: str
     __doc__: str
