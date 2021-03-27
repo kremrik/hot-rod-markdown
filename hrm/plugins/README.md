@@ -56,20 +56,20 @@ class ChangeHeadings(HotRodMarkdown):
 
 ### Walk-through
 
-#### [required] `from hrm.plugins._base import HotRodMarkdown`
+#### `from hrm.plugins._base import HotRodMarkdown` [required]
 The required base class
 
-#### [optional] `__doc__`
+#### `__doc__` [optional]
 Any docstrings you write at the plugin's class-level will be incorporated into the CLI's subcommand `hrm [sub-cmd] -h` option.
 
-#### [optional] `__help__`
+#### `__help__` [optional]
 You can create a `__help__` attribute for your plugin to provide the user with a short description of the subcommand when running `hrm -h`
 
-#### [optional] `change: int`
+#### `change: int` [optional]
 If your plugin requires additional arguments from the command line, you can simply use class annotations with type hints (ie, `foo: Optional[int]` for an option argument).
 Any args generated this way will be fed into the `transform` method via `**kwargs`.
 
-#### [optional] `change = kwargs["change"]`
+#### `change = kwargs["change"]` [optional]
 As noted above, this is how you can access any command line options
 
 ### External plugins directory
