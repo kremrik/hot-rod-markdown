@@ -8,15 +8,21 @@
 
 Soup-up your Markdown!
 
+## Installation
+```
+python -m pip install git+https://github.com/kremrik/hot-rod-markdown.git
+```
+
 ## Motivation
-Markdown is God's gift to technical writers.
+Markdown is an incredible tool for technical writers.
 It's easy to understand, always human-readable, and has the internet-equivalent [lifespan](https://brandur.org/fragments/graceful-degradation-time) of styrofoam.
 For these reasons (and many more), it's a fantastic medium for communication.
-`hrm` exists simply to make Markdown even more usable.
+`hrm` exists to make Markdown even more usable.
 
 ## Concepts
-`hrm` gives you two primary ways of usage:
-1. The built-in commands
+At its core, `hrm` is a command-line tool that walks a directory and applies a transformation to any Markdown files it encounters along the way.
+These transformations may be accessed in two different ways:
+1. The commands that are bundled with the `hrm` package:
     ```
     $ hrm -h
     usage: hrm [-h] {change-headings,inject-code} ...
@@ -29,13 +35,36 @@ For these reasons (and many more), it's a fantastic medium for communication.
     optional arguments:
     -h, --help            show this help message and exit
     ```
-1. The plugin model found [here](hrm/plugins/README.md)
-
+1. External plugins that you can create yourself (documentation [here](hrm/plugins/README.md))
 Plugins provide a simple, easy way of essentially creating your own "DSL's" for Markdown.
+
+To view the documentation for any provided subcommand, just run help:
+```
+$ hrm inject-code -h
+usage: hrm inject-code [-h] [-v] [path]
+
+Code from files can be inserted into md codeblocks by
+annotating them like the below example:
+
+```python INJECT_CODE(file.py)
+```       ^^^^^^^^^^^^^^^^^^^^
+
+The underlined portion reflects a relative reference to
+the file whose contents you wish to inject, which will
+then appear between the backticks. The language is not
+required to be specified.
+
+positional arguments:
+  path           Path to directory at which to begin
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose
+```
 
 ## Example
 Let's look at one example of a command `hrm` exposes by default.
-Suppose you have a nice README.md where you wish to show a code snippet for your users:
+Suppose you have a README.md where you wish to show a code snippet for your users:
 
 ````
 # Title
@@ -47,12 +76,11 @@ def greet(name):
 ```
 ````
 
-Great!
-Your users have an example of how to write a quick function in Python.
-Wouldn't it suck though if, in your haste to write that example, you accidentally used different quotes in the return?
-Unfortunately, the only way you'd know that is if you tested it, which means copying and pasting it into your REPL, or into a file to manually execute.
-Now imagine having dozens of examples like this.
-`hrm` offers you a simple framework for this very problem.
+Wouldn't it suck though if this example didn't work for the reader who copied and pasted it into their REPL?
+What if, in your haste to write that example, you accidentally used different quotes in the return?
+Unfortunately, the only way you can be sure is if you tested it yourself, which means copying and pasting it into the REPL, or into a file to manually execute.
+If you have dozens of code snippets like this, testing (and updating) will get annoying very quickly.
+`hrm` offers you a simple solution for this problem.
 Take a look at the new example below:
 
 ````
@@ -88,8 +116,4 @@ def greet(name):
 ```
 ````
 
-Now, you're free to test that example file like any other Python code.
-
-
-## Installation
-TBD
+Now, you're free to test that example file like any other Python code, make changes as needed, etc, and `hrm` can be used to keep everything in sync.
