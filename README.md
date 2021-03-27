@@ -64,7 +64,7 @@ optional arguments:
 
 ## Example
 Let's look at one example of a command `hrm` exposes by default.
-Suppose you have a nice README.md where you wish to show a code snippet for your users:
+Suppose you have a README.md where you wish to show a code snippet for your users:
 
 ````
 # Title
@@ -76,12 +76,11 @@ def greet(name):
 ```
 ````
 
-Great!
-Your users have an example of how to write a quick function in Python.
-Wouldn't it suck though if, in your haste to write that example, you accidentally used different quotes in the return?
-Unfortunately, the only way you'd know that is if you tested it, which means copying and pasting it into your REPL, or into a file to manually execute.
-Now imagine having dozens of examples like this.
-`hrm` offers you a simple framework for this very problem.
+Wouldn't it suck though if this example didn't work for the reader who copied and pasted it into their REPL?
+What if, in your haste to write that example, you accidentally used different quotes in the return?
+Unfortunately, the only way you can be sure is if you tested it yourself, which means copying and pasting it into the REPL, or into a file to manually execute.
+If you have dozens of code snippets like this, testing (and updating) will get annoying very quickly.
+`hrm` offers you a simple solution for this problem.
 Take a look at the new example below:
 
 ````
@@ -117,6 +116,4 @@ def greet(name):
 ```
 ````
 
-Now, you're free to test that example file like any other Python code.
-
-
+Now, you're free to test that example file like any other Python code, make changes as needed, etc, and `hrm` can be used to keep everything in sync.
