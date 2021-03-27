@@ -38,6 +38,30 @@ These transformations may be accessed in two different ways:
 1. External plugins that you can create yourself (documentation [here](hrm/plugins/README.md))
 Plugins provide a simple, easy way of essentially creating your own "DSL's" for Markdown.
 
+To view the documentation for any provided subcommand, just run help:
+```
+$ hrm inject-code -h
+usage: hrm inject-code [-h] [-v] [path]
+
+Code from files can be inserted into md codeblocks by
+annotating them like the below example:
+
+```python INJECT_CODE(file.py)
+```       ^^^^^^^^^^^^^^^^^^^^
+
+The underlined portion reflects a relative reference to
+the file whose contents you wish to inject, which will
+then appear between the backticks. The language is not
+required to be specified.
+
+positional arguments:
+  path           Path to directory at which to begin
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose
+```
+
 ## Example
 Let's look at one example of a command `hrm` exposes by default.
 Suppose you have a nice README.md where you wish to show a code snippet for your users:
