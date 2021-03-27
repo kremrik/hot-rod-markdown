@@ -68,7 +68,7 @@ You can create a `__help__` attribute for your plugin to provide the user with a
 #### `change: int` [optional]
 If your plugin requires additional arguments from the command line, you can simply use class annotations with type hints.
 Any args generated this way will be fed into the `transform` method via `**kwargs`.
-This example will create a _required_ option `change` that will appear as `--change` in the help.
+This example will create a _required_ option `change` that will can be set with `--change` at the command-line.
 If you wished to make it optional, simply use `foo: Optional[int]` instead.
 
 #### `change = kwargs["change"]` [optional]
