@@ -17,11 +17,12 @@ python -m pip install git+https://github.com/kremrik/hot-rod-markdown.git
 Markdown is an incredible tool for technical writers.
 It's easy to understand, always human-readable, and has the internet-equivalent [lifespan](https://brandur.org/fragments/graceful-degradation-time) of styrofoam.
 For these reasons (and many more), it's a fantastic medium for communication.
-`hrm` exists simply to make Markdown even more usable.
+`hrm` exists to make Markdown even more usable.
 
 ## Concepts
-`hrm` gives you two primary ways of usage:
-1. The built-in commands
+At its core, `hrm` is a command-line tool that walks a directory and applies a transformation to any Markdown files it encounters along the way.
+These transformations may be accessed in two different ways:
+1. The commands that are bundled with the `hrm` package:
     ```
     $ hrm -h
     usage: hrm [-h] {change-headings,inject-code} ...
@@ -34,8 +35,7 @@ For these reasons (and many more), it's a fantastic medium for communication.
     optional arguments:
     -h, --help            show this help message and exit
     ```
-1. The plugin model found [here](hrm/plugins/README.md)
-
+1. External plugins that you can create yourself (documentation [here](hrm/plugins/README.md))
 Plugins provide a simple, easy way of essentially creating your own "DSL's" for Markdown.
 
 ## Example
