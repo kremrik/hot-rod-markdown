@@ -8,8 +8,13 @@
 
 Soup-up your Markdown!
 
+## Installation
+```
+python -m pip install git+https://github.com/kremrik/hot-rod-markdown.git
+```
+
 ## Motivation
-Markdown is God's gift to technical writers.
+Markdown is an incredible tool for technical writers.
 It's easy to understand, always human-readable, and has the internet-equivalent [lifespan](https://brandur.org/fragments/graceful-degradation-time) of styrofoam.
 For these reasons (and many more), it's a fantastic medium for communication.
 `hrm` exists simply to make Markdown even more usable.
@@ -91,5 +96,3 @@ def greet(name):
 Now, you're free to test that example file like any other Python code.
 
 
-## Installation
-TBD
