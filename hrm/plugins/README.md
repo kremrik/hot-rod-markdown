@@ -66,8 +66,10 @@ Any docstrings you write at the plugin's class-level will be incorporated into t
 You can create a `__help__` attribute for your plugin to provide the user with a short description of the subcommand when running `hrm -h`
 
 #### `change: int` [optional]
-If your plugin requires additional arguments from the command line, you can simply use class annotations with type hints (ie, `foo: Optional[int]` for an option argument).
+If your plugin requires additional arguments from the command line, you can simply use class annotations with type hints.
 Any args generated this way will be fed into the `transform` method via `**kwargs`.
+This example will create a _required_ option `change` that will appear as `--change` in the help.
+If you wished to make it optional, simply use `foo: Optional[int]` instead.
 
 #### `change = kwargs["change"]` [optional]
 As noted above, this is how you can access any command line options
