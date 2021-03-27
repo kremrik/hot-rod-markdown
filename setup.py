@@ -1,5 +1,5 @@
-import os
-import re
+import hrm
+
 from setuptools import find_packages, setup
 
 
@@ -17,29 +17,9 @@ def get_package_name() -> str:
     return package
 
 
-def get_version() -> str:
-    package = get_package_name()
-    versionfile = os.path.join(package, "_version.py")
-    verstr = "unknown"
-
-    try:
-        verstrline = open(versionfile, "rt").read()
-    except EnvironmentError:
-        pass  # no file
-    else:
-        VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
-        mo = re.search(VSRE, verstrline, re.M)
-        if mo:
-            verstr = mo.group(1)
-        else:
-            raise RuntimeError("Error loading version")
-    
-    return verstr
-
-
 setup(
     name=get_package_name(),
-    version=get_version(),
+    version=hrm.__version__,
     author=AUTHOR,
     url="https://github.com/{}/{}".format(GITID, get_package_name()),
     description=DESCRIPTION,
