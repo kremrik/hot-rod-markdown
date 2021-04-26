@@ -1,8 +1,9 @@
 from hrm.io.fs import read_file
-from hrm.plugins._base import HotRodMarkdown
+from hrm.plugins._base import HotRodMarkdown, LOGGER
 
 import re
 from collections import namedtuple
+from difflib import context_diff
 from typing import (
     Generator,
     List,
@@ -49,8 +50,17 @@ class InjectCode(HotRodMarkdown):
             blocks=codeblocks, markdown=md
         )
 
+        if not output:
+            return ""
+
         if "".join(md) == output:
             return ""
+
+        LOGGER.info(
+            InjectCode._diff(
+                md, output.splitlines(keepends=True)
+            )
+        )
 
         return output
 
@@ -179,3 +189,14 @@ class InjectCode(HotRodMarkdown):
         code = read_file(path)
         str_code = "".join(code)
         return str_code
+
+    @staticmethod
+    def _diff(original: List[str], new: List[str]) -> str:
+        fromfile = "ORIGINAL"
+        tofile = "NEW"
+
+        diff = context_diff(
+            original, new, fromfile=fromfile, tofile=tofile
+        )
+        text = "\n" + "".join(diff)
+        return text
