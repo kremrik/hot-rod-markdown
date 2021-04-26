@@ -8,10 +8,10 @@ from typing import Generator, Union
 from collections.abc import Iterator
 
 
-LOGGER = logger(__file__)
+LOGGER = logger("hrm")
 
 
-LOGGER = logger(__file__)
+__all__ = ["HotRodMarkdown", "LOGGER"]
 
 
 class HotRodMarkdown(ABC):
