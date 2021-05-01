@@ -1,3 +1,4 @@
+from hrm import __version__
 from cli.loader import load_plugins, command
 
 from argparse import (
@@ -16,19 +17,20 @@ __all__ = ["cli"]
 
 
 PARSER_NAME = "hrm"
+DESCRIPTION = f"{PARSER_NAME} v{__version__}"
 PLUGIN_ENV = "HRM_PLUGINS"
 
 
 def cli(arguments: List[str]) -> Namespace:
     plugins = load_plugins(_get_external_path())
-    parser = make_parser(prog=PARSER_NAME, plugins=plugins)
+    parser = make_parser(plugins=plugins)
     return parser.parse_args(arguments)
 
 
-def make_parser(
-    prog: str, plugins: List[command]
-) -> ArgumentParser:
-    parser = ArgumentParser(prog=prog)
+def make_parser(plugins: List[command]) -> ArgumentParser:
+    parser = ArgumentParser(
+        prog=PARSER_NAME, description=DESCRIPTION
+    )
 
     subparsers = parser.add_subparsers()
 
