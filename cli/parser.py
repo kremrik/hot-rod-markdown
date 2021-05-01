@@ -15,10 +15,13 @@ from os.path import abspath
 __all__ = ["cli"]
 
 
+PARSER_NAME = "hrm"
+PLUGIN_ENV = "HRM_PLUGINS"
+
+
 def cli(arguments: List[str]) -> Namespace:
-    parser_name = "hrm"
     plugins = load_plugins(_get_external_path())
-    parser = make_parser(prog=parser_name, plugins=plugins)
+    parser = make_parser(prog=PARSER_NAME, plugins=plugins)
     return parser.parse_args(arguments)
 
 
@@ -125,7 +128,7 @@ def _arg_required(arg_type) -> bool:
 
 
 def _get_external_path() -> Optional[str]:
-    external_path = getenv("HRM_PLUGINS")
+    external_path = getenv(PLUGIN_ENV)
     if not external_path:
         return None
 

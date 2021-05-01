@@ -5,11 +5,15 @@ import re
 from collections import namedtuple
 from typing import List, Optional
 from os import listdir
-from os.path import basename, dirname, join, splitext
+from os.path import dirname, join
 import importlib.util
 
 
 __all__ = ["load_plugins"]
+
+
+PLUGIN_PATH = "hrm/plugins"
+BASE_CLASS_NAME = "HotRodMarkdown"
 
 
 command = namedtuple("command", ["module_name", "obj"])
@@ -18,7 +22,7 @@ command = namedtuple("command", ["module_name", "obj"])
 def load_plugins(
     external_path: Optional[str],
 ) -> List[command]:
-    builtin_path = "hrm/plugins"
+    builtin_path = PLUGIN_PATH
     paths = [builtin_path]
     if external_path:
         paths.append(external_path)
@@ -36,7 +40,6 @@ def _load_plugins(path: str) -> List[command]:
 
     plugins = []
     for plugin_path in plugin_locs:
-        # plugin_name = _mod_name_from_path(plugin_path)
         module_ast = _path_to_ast(plugin_path)
         class_name = _plugin_class_name_from_ast(
             module_ast
@@ -84,7 +87,7 @@ def _plugin_class_name_from_ast(module: ast.Module) -> str:
     hrm_classes = [
         h
         for h in classes
-        if h.bases[0].id == "HotRodMarkdown"  # type: ignore
+        if h.bases[0].id == BASE_CLASS_NAME  # type: ignore
     ]
 
     plugin_name = hrm_classes[0].name  # use first
