@@ -17,7 +17,7 @@ __all__ = ["cli"]
 
 
 PARSER_NAME = "hrm"
-DESCRIPTION = f"{PARSER_NAME} v{__version__}"
+VERSION = f"{PARSER_NAME} {__version__}"
 PLUGIN_ENV = "HRM_PLUGINS"
 
 
@@ -28,10 +28,11 @@ def cli(arguments: List[str]) -> Namespace:
 
 
 def make_parser(plugins: List[command]) -> ArgumentParser:
-    parser = ArgumentParser(
-        prog=PARSER_NAME, description=DESCRIPTION
-    )
+    parser = ArgumentParser(prog=PARSER_NAME)
 
+    parser.add_argument(
+        "--version", action="version", version=VERSION
+    )
     subparsers = parser.add_subparsers()
 
     for name, cmd in plugins:
