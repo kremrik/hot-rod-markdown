@@ -10,10 +10,9 @@ from typing import List, Optional
 class test_make_parser(unittest.TestCase):
     def test(self):
         output = make_parser(
-            prog="test",
             plugins=[("inject_code", InjectCode)],
         )
-        self.assertEqual(output.prog, "test")
+        self.assertEqual(output.prog, "hrm")
 
         subparsers = get_subparsers(output)
         self.assertEqual(len(subparsers), 1)

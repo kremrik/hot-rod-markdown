@@ -94,9 +94,43 @@ class test_transform(unittest.TestCase):
         output = ic.transform(markdown)
         self.assertEqual(gold, output)
 
+    def test_no_trailing_newline_in_file(
+        self, m_exists, m_read_file
+    ):
+        m_exists.return_value = True
+        m_read_file.return_value = "foo=1\nprint(foo)"
 
-# testing "APIs" for main implementation abstractions
-# ---------------------------------------------------------
+        markdown = [
+            "# header\n",
+            "```python INJECT_CODE(example.py)\n",
+            "foo=1\n",
+            "```\n",
+            "## subheader\n",
+            "```json\n",
+            '{"foo": 1}\n',
+            "```\n",
+        ]
+        markdown = (line for line in markdown)
+
+        gold = dedent(
+            """\
+        # header
+        ```python INJECT_CODE(example.py)
+        foo=1
+        print(foo)
+        ```
+        ## subheader
+        ```json
+        {"foo": 1}
+        ```
+        """
+        )
+
+        ic = InjectCode(path=".")
+        output = ic.transform(markdown)
+        self.assertEqual(gold, output)
+
+
 class test_get_codeblocks(unittest.TestCase):
     def test_no_codeblocks(self):
         md = ["# header\n", "##subheader"]

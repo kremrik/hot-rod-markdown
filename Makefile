@@ -22,6 +22,7 @@ functional-tests :
 	@echo
 	@echo -e '$(BLUE)functional-tests'
 	@echo -e        '----------$(NO_COLOR)'
+	@pip install . --upgrade
 	@python3 -m pytest --rootdir=tests/functional tests/functional
 	
 .PHONY: code-coverage

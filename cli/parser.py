@@ -1,3 +1,4 @@
+from hrm import __version__
 from cli.loader import load_plugins, command
 
 from argparse import (
@@ -15,18 +16,23 @@ from os.path import abspath
 __all__ = ["cli"]
 
 
+PARSER_NAME = "hrm"
+VERSION = f"{PARSER_NAME} {__version__}"
+PLUGIN_ENV = "HRM_PLUGINS"
+
+
 def cli(arguments: List[str]) -> Namespace:
-    parser_name = "hrm"
     plugins = load_plugins(_get_external_path())
-    parser = make_parser(prog=parser_name, plugins=plugins)
+    parser = make_parser(plugins=plugins)
     return parser.parse_args(arguments)
 
 
-def make_parser(
-    prog: str, plugins: List[command]
-) -> ArgumentParser:
-    parser = ArgumentParser(prog=prog)
+def make_parser(plugins: List[command]) -> ArgumentParser:
+    parser = ArgumentParser(prog=PARSER_NAME)
 
+    parser.add_argument(
+        "--version", action="version", version=VERSION
+    )
     subparsers = parser.add_subparsers()
 
     for name, cmd in plugins:
@@ -125,7 +131,7 @@ def _arg_required(arg_type) -> bool:
 
 
 def _get_external_path() -> Optional[str]:
-    external_path = getenv("HRM_PLUGINS")
+    external_path = getenv(PLUGIN_ENV)
     if not external_path:
         return None
 

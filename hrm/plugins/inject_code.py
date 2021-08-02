@@ -128,7 +128,9 @@ class InjectCode(HotRodMarkdown):
         )
 
         code = [
-            InjectCode._resolve_refer(c)
+            InjectCode._pad_tail(
+                InjectCode._resolve_refer(c)
+            )
             for c in sorted_blocks
         ]
 
@@ -189,6 +191,13 @@ class InjectCode(HotRodMarkdown):
         code = read_file(path)
         str_code = "".join(code)
         return str_code
+
+    @staticmethod
+    def _pad_tail(code: str) -> str:
+        NEWLINE = "\n"
+        if not code.endswith(NEWLINE):
+            return code + NEWLINE
+        return code
 
     @staticmethod
     def _diff(original: List[str], new: List[str]) -> str:
