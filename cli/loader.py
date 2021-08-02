@@ -67,7 +67,7 @@ def _load_module(module_name: str, module_path: str):
     spec = importlib.util.spec_from_file_location(
         module_name, module_path
     )
-    mod = importlib.util.module_from_spec(spec)
+    mod = importlib.util.module_from_spec(spec)  # type: ignore
     spec.loader.exec_module(mod)  # type: ignore
     return mod
 
